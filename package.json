@@ -1,0 +1,19 @@
+{
+  "name": "e-procurement-software",
+  "version": "1.0.0",
+  "description": "is a web-application that allows an organization to automate the processes of purchasing materials.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ramix1235/e-procurement-software.git"
+  },
+  "author": "V.S. Kharitonov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ramix1235/e-procurement-software/issues"
+  },
+  "homepage": "https://github.com/ramix1235/e-procurement-software#readme"
+}
