@@ -48,7 +48,7 @@ module.exports = {
   entry: ['babel-polyfill', './src/client.js'],
   resolve: {
     modules: [
-      // path.join(__dirname, 'src'),
+      path.join(__dirname, 'src'),
       'node_modules'
     ],
     extensions: ['.js', '.jsx']
