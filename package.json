@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "set NODE_ENV=production&& webpack -p",
     "nodemon": "nodemon server.js",
-    "dev": "webpack-dev-server --debug --devtool eval-source-map --output-pathinfo --watch --colors --inline --content-base public --port 8050 --host 0.0.0.0"
+    "dev": "webpack-dev-server --debug --devtool eval-source-map --output-pathinfo --watch --colors --inline --content-base public --port 8050 --host 0.0.0.0",
+    "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "postinstall": "webpack -p"
   },
   "repository": {
     "type": "git",
