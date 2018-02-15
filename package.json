@@ -9,7 +9,8 @@
     "nodemon": "nodemon server.js",
     "dev": "webpack-dev-server --debug --devtool eval-source-map --output-pathinfo --watch --colors --inline --content-base public --port 8050 --host 0.0.0.0",
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "postinstall": "webpack -p"
+    "postinstall": "webpack -p",
+    "heroku-postbuild": "npm run build"
   },
   "repository": {
     "type": "git",

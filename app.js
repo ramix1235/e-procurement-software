@@ -19,6 +19,6 @@ app.engine('ejs', engine);
 app.set('view engine', 'ejs');
 app.set('layout extractScripts', true);
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server listening on: ${PORT}`);
 });
