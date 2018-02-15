@@ -1,0 +1,4 @@
+{
+    "port": 80,
+    "databaseURI": "mongodb://admin:admin@ds225028.mlab.com:25028/e-procurement-database"
+}
