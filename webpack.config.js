@@ -26,7 +26,9 @@ const plugins = [
     options: {
       eslint: { configFile: path.join(__dirname, '.eslintrc') }
     }
-  })
+  }),
+  new webpack.NamedModulesPlugin(),
+  new webpack.HotModuleReplacementPlugin()
 ];
 
 if (process.env.NODE_ENV === 'production') {
@@ -68,15 +70,15 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader')
+        use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: [ 'css-loader' ] })
       },
       {
         test: /\.less$/,
-        use: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!less-loader')
+        use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: [ 'css-loader!less-loader' ] })
       },
       {
         test: /\.scss$/,
-        use: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!sass-loader')
+        use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: [ 'css-loader!sass-loader' ] })
       },
       {
         test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
@@ -89,14 +91,6 @@ module.exports = {
           }
         ]
       },
-      // {
-      //   test: /\.json$/,
-      //   use: [
-      //     {
-      //       loader: 'json-loader'
-      //     }
-      //   ]
-      // },
       {
         test: /\.jsx?$/,
         loader: process.env.NODE_ENV !== 'production' ? 'babel-loader!eslint-loader' : 'babel-loader',
