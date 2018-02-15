@@ -23,21 +23,19 @@
   "homepage": "https://github.com/ramix1235/e-procurement-software#readme",
   "devDependencies": {
     "babel-eslint": "^8.2.1",
-    "babel-polyfill": "^6.26.0",
-    "clean-webpack-plugin": "^0.1.18",
     "css-loader": "^0.28.9",
     "eslint": "^4.17.0",
     "eslint-loader": "^1.9.0",
     "eslint-plugin-react": "^7.6.1",
-    "extract-text-webpack-plugin": "^3.0.2",
     "less-loader": "^4.0.5",
     "redux-devtools-extension": "^2.13.2",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.20.1",
     "url-loader": "^0.6.2"
-
   },
   "dependencies": {
+    "extract-text-webpack-plugin": "^3.0.2",
+    "clean-webpack-plugin": "^0.1.18",
     "assets-webpack-plugin": "^3.5.1",
     "webpack-dev-server": "^2.11.1",
     "webpack": "^3.10.0",
@@ -47,6 +45,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "babel-loader": "^7.1.2",
     "babel-core": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
     "axios": "^0.17.1",
     "body-parser": "^1.18.2",
     "ejs": "^2.5.7",
