@@ -2,10 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getProducts  } from '../redux/actions/productActions';
+import { getCategories  } from '../redux/actions/categoryActions';
+import { getCurrencies  } from '../redux/actions/currencyActions';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/MenuItem';
 import DropDownMenu from 'material-ui/DropDownMenu';
+import RaisedButton from 'material-ui/RaisedButton';
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
+import AddProduct from './Products/AddProduct';
 import {
   Table,
   TableBody,
@@ -17,27 +22,23 @@ import {
 
 const propTypes = {
   products: PropTypes.array,
-  loadProducts: PropTypes.func
+  loadProducts: PropTypes.func,
+  categories: PropTypes.array,
+  loadCategories: PropTypes.func,
+  currencies: PropTypes.array,
+  loadCurrencies: PropTypes.func
 };
 
 const defaultProps = {
-  products: []
+  products: [],
+  categories: [],
+  currencies: []
 };
 
 class DataTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fixedHeader: true,
-      fixedFooter: false,
-      stripedRows: false,
-      showRowHover: true,
-      selectable: false,
-      multiSelectable: false,
-      enableSelectAll: false,
-      deselectOnClickaway: true,
-      showCheckboxes: false,
-      height: '300px',
       filtering: null,
       searchBy: 0
     };
@@ -45,6 +46,8 @@ class DataTable extends Component {
 
   componentDidMount() {
     this.props.loadProducts();
+    this.props.loadCategories();
+    this.props.loadCurrencies();
   }
 
   handleDataTable = (event, index, value) => {
@@ -52,52 +55,74 @@ class DataTable extends Component {
   }
 
   handleDropDown = (event, index, value) => {
-    console.log(value);
     this.setState({ searchBy: value });
   }
 
   render() {
     return (
       <div>
-        <DropDownMenu className='space-top-s' value={this.state.searchBy} onChange={this.handleDropDown}>
-          <MenuItem value={0} primaryText={'Name'} />
-          <MenuItem value={1} primaryText={'Vendor Code'} />
-          <MenuItem value={2} primaryText={'Category'} />
-          <MenuItem value={3} primaryText={'Price'} />
+        <DropDownMenu className='dropdown-s' value={this.state.searchBy} onChange={this.handleDropDown}>
+          <MenuItem value={0} key={0} primaryText={'Name'} />
+          <MenuItem value={1} key={1} primaryText={'Vendor Code'} />
+          <MenuItem value={2} key={2} primaryText={'Category'} />
+          <MenuItem value={3} key={3} primaryText={'Price'} />
+          <MenuItem value={4} key={4} primaryText={'Currency'} />
         </DropDownMenu>
-        <br/>
         <TextField className='space-left-s' hintText='Search' onChange={this.handleDataTable}/>
+        <RadioButtonGroup name='Views' defaultSelected='products' className='radio-group space-top-s space-left-xs2'>
+          <RadioButton
+            value='products'
+            label='Products'
+          />
+          <RadioButton
+            value='categories'
+            label='Categories'
+            className='radio-btn'
+          />
+          <RadioButton
+            value='currencies'
+            label='Currencies'
+            className='radio-btn'
+          />
+          <RadioButton
+            value='suppliers'
+            label='Suppliers'
+            disabled
+            className='radio-btn'
+          />
+        </RadioButtonGroup>
+        <div className='right'>
+          <AddProduct categories={this.props.categories} currencies={this.props.currencies}/>
+          <RaisedButton className='space-left-s' label='History changes' disabled/>
+        </div>
         <Table
-          height={this.state.height}
-          fixedHeader={this.state.fixedHeader}
-          fixedFooter={this.state.fixedFooter}
-          selectable={this.state.selectable}
-          multiSelectable={this.state.multiSelectable}
+          className='space-top-s'
+          height={'300px'}
+          fixedHeader
+          fixedFooter={false}
+          selectable={false}
+          multiSelectable={false}
         >
           <TableHeader
-            displaySelectAll={this.state.showCheckboxes}
-            adjustForCheckbox={this.state.showCheckboxes}
-            enableSelectAll={this.state.enableSelectAll}
+            displaySelectAll={false}
+            adjustForCheckbox={false}
+            enableSelectAll={false}
           >
-            <TableRow>
-              <TableHeaderColumn colSpan='6' tooltip='Products' style={{ textAlign: 'center' }}>
-                Products
-              </TableHeaderColumn>
-            </TableRow>
             <TableRow>
               <TableHeaderColumn tooltip='The ID'>ID</TableHeaderColumn>
               <TableHeaderColumn tooltip='The Name'>Name</TableHeaderColumn>
               <TableHeaderColumn tooltip='The Vendor Code'>Vendor Code</TableHeaderColumn>
               <TableHeaderColumn tooltip='The Category'>Category</TableHeaderColumn>
               <TableHeaderColumn tooltip='The Price'>Price</TableHeaderColumn>
+              <TableHeaderColumn tooltip='The Currency'>Currency</TableHeaderColumn>
               <TableHeaderColumn tooltip='The Actions'>Actions</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody
-            displayRowCheckbox={this.state.showCheckboxes}
-            deselectOnClickaway={this.state.deselectOnClickaway}
-            showRowHover={this.state.showRowHover}
-            stripedRows={this.state.stripedRows}
+            displayRowCheckbox={false}
+            deselectOnClickaway
+            showRowHover
+            stripedRows={false}
           >
             {this.props.products
               .filter(item => {
@@ -109,6 +134,7 @@ class DataTable extends Component {
                     case 1: res = item.vendor_code.match(new RegExp(this.state.filtering, 'i')); break;
                     case 3: res = item.price.toString().match(new RegExp(this.state.filtering, 'i')); break;
                     case 2: res = item.category.name.match(new RegExp(this.state.filtering, 'i')); break;
+                    case 4: res = item.currency.name.match(new RegExp(this.state.filtering, 'i')); break;
                     default: res = true;
                   }
                 }
@@ -121,9 +147,9 @@ class DataTable extends Component {
                   <TableRowColumn>{row.vendor_code}</TableRowColumn>
                   <TableRowColumn>{row.category.name}</TableRowColumn>
                   <TableRowColumn>{row.price}</TableRowColumn>
+                  <TableRowColumn>{row.currency.name}</TableRowColumn>
                   <TableRowColumn>
-                    <FlatButton label='Add'/><br/>
-                    <FlatButton label='Edit'/><br/>
+                    <FlatButton label='Edit'/>
                     <FlatButton label='Delete'/>
                   </TableRowColumn>
                 </TableRow>
@@ -140,9 +166,13 @@ DataTable.defaultProps = defaultProps;
 
 export default connect(
   state => ({
-    products: state.products
+    products: state.products,
+    categories: state.categories,
+    currencies: state.currencies
   }),
   dispatch => ({
-    loadProducts: () => dispatch(getProducts())
+    loadProducts: () => dispatch(getProducts()),
+    loadCategories: () => dispatch(getCategories()),
+    loadCurrencies: () => dispatch(getCurrencies())
   })
 )(DataTable);

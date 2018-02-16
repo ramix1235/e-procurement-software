@@ -4,7 +4,7 @@ const Product = require('../models/product');
 class ProductController extends BaseController {
   static getProducts(req, res, next) {
     Product.find({})
-      .populate('category')
+      .populate('category currency')
       .exec((err, products) => {
         if (err) throw err;
         res.send(products);

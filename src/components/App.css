@@ -1,12 +1,49 @@
 .space-top-xs {
     margin-top: 0.1em!important;
 }
+.space-top-xs2 {
+    margin-top: 0.5em!important;
+}
 .space-top-s {
     margin-top: 2em!important;
+}
+.space-left-xs {
+    margin-left: 0.5em!important;
+}
+.space-left-xs2 {
+    margin-left: 1em!important;
 }
 .space-left-s {
     margin-left: 1.5em!important;
 }
 .table-inside {
     margin: 0em 0em 0em 2em;
+}
+.right {
+    position: absolute;
+    text-align: right;
+    right: 1em;
+    top: 6.2em;
+}
+.dropdown-xs {
+    position: absolute;
+    top: 1.1em;
+}
+.dropdown-s {
+    position: absolute;
+    top: 1.2em;
+}
+.element-inline {
+    display: inline;
+}
+.radio-group {
+    display: flex;
+    flex-direction: row;
+    width: 30%;
+    /* position: absolute; */
+    /* top: 2.5em; */
+    /* left: 27em; */
+}
+.radio-btn {
+    margin-left: 1em;
 }

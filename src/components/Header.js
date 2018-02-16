@@ -12,10 +12,10 @@ export default class Header extends Component {
           iconStyleLeft={{ display: 'none' }}
         />
         <Tabs className='space-top-xs'>
-          <Tab label='Products'>
+          <Tab label='Inventory'>
             <DataTable/>
           </Tab>
-          <Tab label='Suppliers'>
+          <Tab label='Charts'>
           </Tab>
           <Tab label='Orders'>
           </Tab>

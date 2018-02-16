@@ -19,6 +19,11 @@ const productSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: true,
     ref: 'categories'
+  },
+  currency: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'currencies'
   }
 });
 
