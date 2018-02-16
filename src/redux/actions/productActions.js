@@ -10,3 +10,16 @@ export function getProducts() {
       });
   };
 }
+
+export function addProduct(newProduct) {
+  return dispatch => {
+    return axios
+      .post('/api/product/addProduct', {
+        product: newProduct
+      })
+      .then(product => {
+        dispatch({ type: 'ADD_PRODUCT_SUCCESS', payload: product.data });
+        return product.data;
+      });
+  };
+}

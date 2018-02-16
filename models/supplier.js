@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const supplierSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   address: {
     type: String,
@@ -18,6 +19,8 @@ const supplierSchema = new Schema({
     type: [ [Schema.Types.ObjectId] ],
     required: true
   }
+}, {
+  versionKey: false
 });
 
 module.exports = mongoose.model('suppliers', supplierSchema);

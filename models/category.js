@@ -6,13 +6,13 @@ const Schema = mongoose.Schema;
 const categorySchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   }
-});
-// }, {
+}, {
 //   collection: tableName,
-//   versionKey: false
-// });
+  versionKey: false
+});
 
 // module.exports = mongoose.model('categories', categorySchema, tableName);
 module.exports = mongoose.model('categories', categorySchema);

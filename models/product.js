@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const productSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   vendorCode: {
     type: String,
@@ -25,7 +26,8 @@ const productSchema = new Schema({
     required: true,
     ref: 'currencies'
   }
+}, {
+  versionKey: false
 });
-
 
 module.exports = mongoose.model('products', productSchema);
