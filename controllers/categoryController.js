@@ -1,5 +1,6 @@
 const BaseController = require('./baseController');
 const Category = require('../models/category');
+const Product = require('../models/product');
 
 class CategoryController extends BaseController {
   static getCategories(req, res, next) {
@@ -59,17 +60,27 @@ class CategoryController extends BaseController {
       _id: req.body.category._id
     };
 
-    Category.findByIdAndRemove(deletingCategory._id, (err, category) => {
-      if (err) {
-        console.log('Delete failed!');
-        return res.status(400).send({
-          success: false,
-          message: 'failed'
+    Product.find({ category: deletingCategory._id })
+      .then(products => {
+        if (products.length) {
+          console.log('Delete failed!');
+          return res.status(400).send({
+            success: false,
+            message: 'failed'
+          });
+        }
+        Category.findByIdAndRemove(deletingCategory._id, (err, category) => {
+          if (err) {
+            console.log('Delete failed!');
+            return res.status(400).send({
+              success: false,
+              message: 'failed'
+            });
+          }
+          console.log('Delete succesfully!');
+          this.getCategories(req, res);
         });
-      }
-      console.log('Delete succesfully!');
-      this.getCategories(req, res);
-    });
+      });
   }
 }
 

@@ -1,5 +1,6 @@
 const BaseController = require('./baseController');
 const Currency = require('../models/currency');
+const Product = require('../models/product');
 
 class CurrencyController extends BaseController {
   static getCurrencies(req, res, next) {
@@ -55,17 +56,27 @@ class CurrencyController extends BaseController {
       _id: req.body.currency._id
     };
 
-    Currency.findByIdAndRemove(deletingCurrency._id, (err, currency) => {
-      if (err) {
-        console.log('Delete failed!');
-        return res.status(400).send({
-          success: false,
-          message: 'failed'
+    Product.find({ currency: deletingCurrency._id })
+      .then(products => {
+        if (products.length) {
+          console.log('Delete failed!');
+          return res.status(400).send({
+            success: false,
+            message: 'failed'
+          });
+        }
+        Currency.findByIdAndRemove(deletingCurrency._id, (err, currency) => {
+          if (err) {
+            console.log('Delete failed!');
+            return res.status(400).send({
+              success: false,
+              message: 'failed'
+            });
+          }
+          console.log('Delete succesfully!');
+          this.getCurrencies(req, res);
         });
-      }
-      console.log('Delete succesfully!');
-      this.getCurrencies(req, res);
-    });
+      });
   }
 }
 
