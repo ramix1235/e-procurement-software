@@ -28,10 +28,15 @@ class ProductController extends BaseController {
     });
 
     newProduct.save((err, product) => {
-      if (err) return super.newError(400, err.message);
-      this.getProducts(req, res);
+      // if (err) return super.newError(400, err.message);
+      if (err) {
+        return res.status(400).send({
+          success: false,
+          message: 'failed'
+        });
+      }
       console.log(`Saved succesfully! - ${product.name}`);
-      return;
+      this.getProducts(req, res);
     });
   }
 }

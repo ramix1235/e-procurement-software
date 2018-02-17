@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import Snackbar from 'material-ui/Snackbar';
 import { connect } from 'react-redux';
 import { addProduct  } from '../redux/actions/productActions';
 import { addFields } from './rows';
@@ -20,7 +21,9 @@ class AddItem extends Component {
     this.state = {
       open: false,
       categoryBy: null,
-      currencyBy: null
+      currencyBy: null,
+      feedback: false,
+      feedbackMsg: 'Complete!'
     };
   }
 
@@ -32,6 +35,10 @@ class AddItem extends Component {
     this.setState({ open: false });
   };
 
+  handleRequestClose = () => {
+    this.setState({ feedback: false });
+  }
+
   handleSaveData = () => {
     const newProduct = {
       name: document.getElementById(this.refs.nameField.uniqueId).value,
@@ -41,7 +48,12 @@ class AddItem extends Component {
       currency: this.state.currencyBy
     };
 
-    this.props.addProduct(newProduct);
+    this.props.addProduct(newProduct)
+      .then(this.setState({ feedback: true, feedbackMsg: 'Complete!' }))
+      .catch(err => {
+        // console.log(err.response.data.message);
+        if (err) this.setState({ feedbackMsg: 'Failed!' });
+      });
     this.setState({ open: false });
   }
 
@@ -87,6 +99,12 @@ class AddItem extends Component {
             this.handleDropDownCategories,
             this.handleDropDownCurrencies)}
         </Dialog>
+        <Snackbar
+          open={this.state.feedback}
+          message={this.state.feedbackMsg}
+          autoHideDuration={4000}
+          onRequestClose={this.handleRequestClose}
+        />
       </div>
     );
   }

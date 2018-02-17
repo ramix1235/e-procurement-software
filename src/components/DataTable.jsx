@@ -50,7 +50,7 @@ export default class DataTable extends Component {
         </div>
         <Table
           className='space-top-s'
-          height={'300px'}
+          height={'27em'}
           fixedHeader
           fixedFooter={false}
           selectable={false}

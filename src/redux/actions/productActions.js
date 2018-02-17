@@ -17,9 +17,12 @@ export function addProduct(newProduct) {
       .post('/api/product/addProduct', {
         product: newProduct
       })
-      .then(product => {
-        dispatch({ type: 'ADD_PRODUCT_SUCCESS', payload: product.data });
-        return product.data;
+      .then(products => {
+        dispatch({ type: 'ADD_PRODUCT_SUCCESS', payload: products.data });
+        return products.data;
+      })
+      .catch(err => {
+        if (err) throw err;
       });
   };
 }
