@@ -34,6 +34,25 @@ class CategoryController extends BaseController {
       this.getCategories(req, res);
     });
   }
+
+  static editCategory(req, res) {
+    const editingCategory = new Category({
+      _id: req.body.category._id,
+      name: req.body.category.name
+    });
+
+    Category.findByIdAndUpdate(editingCategory._id, editingCategory, (err, category) => {
+      if (err) {
+        console.log('Edit failed!');
+        return res.status(400).send({
+          success: false,
+          message: 'failed'
+        });
+      }
+      console.log('Edit succesfully!');
+      this.getCategories(req, res);
+    });
+  }
 }
 
 module.exports = CategoryController;

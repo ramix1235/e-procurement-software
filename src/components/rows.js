@@ -271,3 +271,58 @@ exports.addItems = (context) => {
       });
   }
 };
+
+exports.editItems = (context) => {
+  switch (context.props.activeContent.value) {
+    case 'products': editProduct(); break;
+    case 'categories': editCategory(); break;
+    case 'currencies': editCurrency(); break;
+    default: break;
+  }
+
+  function editProduct() {
+    const editingProduct = {
+      _id: context.props.currentItem._id,
+      name: document.getElementById(context.refs.nameField.uniqueId).value,
+      vendorCode: document.getElementById(context.refs.vendorCodeField.uniqueId).value,
+      category: context.state.itemData.categoryBy,
+      price: +document.getElementById(context.refs.priceField.uniqueId).value,
+      currency: context.state.itemData.currencyBy
+    };
+
+    context.props.editProduct(editingProduct)
+      .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
+      .catch(err => {
+        // console.log(err.response.data.message);
+        if (err) context.setState({ feedbackMsg: 'Failed!' });
+      });
+  }
+
+  function editCategory() {
+    const editingCategory = {
+      _id: context.props.currentItem._id,
+      name: document.getElementById(context.refs.nameField.uniqueId).value
+    };
+
+    context.props.editCategory(editingCategory)
+      .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
+      .catch(err => {
+        // console.log(err.response.data.message);
+        if (err) context.setState({ feedbackMsg: 'Failed!' });
+      });
+  }
+
+  function editCurrency() {
+    const editingCurrency = {
+      _id: context.props.currentItem._id,
+      name: document.getElementById(context.refs.nameField.uniqueId).value
+    };
+
+    context.props.editCurrency(editingCurrency)
+      .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
+      .catch(err => {
+        // console.log(err.response.data.message);
+        if (err) context.setState({ feedbackMsg: 'Failed!' });
+      });
+  }
+};

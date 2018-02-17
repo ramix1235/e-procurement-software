@@ -26,3 +26,19 @@ export function addCurrency(newCurrency) {
       });
   };
 }
+
+export function editCurrency(editingCurrency) {
+  return dispatch => {
+    return axios
+      .post('/api/currency/editCurrency', {
+        currency: editingCurrency
+      })
+      .then(currencies => {
+        dispatch({ type: 'EDIT_CURRENCY_SUCCESS', payload: currencies.data });
+        return currencies.data;
+      })
+      .catch(err => {
+        if (err) throw err;
+      });
+  };
+}

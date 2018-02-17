@@ -8,4 +8,8 @@ module.exports = (app) => {
   app.post('/api/category/addCategory', (req, res) => {
     categoryController.addCategory(req, res);
   });
+
+  app.post('/api/category/editCategory', (req, res) => {
+    categoryController.editCategory(req, res);
+  });
 };

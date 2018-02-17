@@ -26,3 +26,19 @@ export function addCategory(newCategory) {
       });
   };
 }
+
+export function editCategory(editingCategory) {
+  return dispatch => {
+    return axios
+      .post('/api/category/editCategory', {
+        category: editingCategory
+      })
+      .then(categories => {
+        dispatch({ type: 'EDIT_CATEGORY_SUCCESS', payload: categories.data });
+        return categories.data;
+      })
+      .catch(err => {
+        if (err) throw err;
+      });
+  };
+}

@@ -30,6 +30,25 @@ class CurrencyController extends BaseController {
       this.getCurrencies(req, res);
     });
   }
+
+  static editCurrency(req, res) {
+    const editingCurrency = new Currency({
+      _id: req.body.currency._id,
+      name: req.body.currency.name
+    });
+
+    Currency.findByIdAndUpdate(editingCurrency._id, editingCurrency, (err, currency) => {
+      if (err) {
+        console.log('Edit failed!');
+        return res.status(400).send({
+          success: false,
+          message: 'failed'
+        });
+      }
+      console.log('Edit succesfully!');
+      this.getCurrencies(req, res);
+    });
+  }
 }
 
 module.exports = CurrencyController;

@@ -4,16 +4,23 @@ import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
 import Dialog from 'material-ui/Dialog';
-import { addFields } from '../rows';
+import { addFields, editItems } from '../rows';
 import { editProduct  } from '../../redux/actions/productActions';
-
+import { editCategory  } from '../../redux/actions/categoryActions';
+import { editCurrency  } from '../../redux/actions/currencyActions';
+import { getProducts  } from '../../redux/actions/productActions';
 
 const propTypes = {
   data: PropTypes.object,
   activeContent: PropTypes.object,
   products: PropTypes.array,
   editProduct: PropTypes.func,
-  currentItem: PropTypes.object
+  categories: PropTypes.array,
+  editCategory: PropTypes.func,
+  currencies: PropTypes.array,
+  editCurrency: PropTypes.func,
+  currentItem: PropTypes.object,
+  loadProducts: PropTypes.func
 };
 
 class EditItem extends Component {
@@ -52,21 +59,8 @@ class EditItem extends Component {
   };
 
   handleEditData = () => {
-    const editingProduct = {
-      _id: this.props.currentItem._id,
-      name: document.getElementById(this.refs.nameField.uniqueId).value,
-      vendorCode: document.getElementById(this.refs.vendorCodeField.uniqueId).value,
-      category: this.state.itemData.categoryBy,
-      price: +document.getElementById(this.refs.priceField.uniqueId).value,
-      currency: this.state.itemData.currencyBy
-    };
-
-    this.props.editProduct(editingProduct)
-      .then(this.setState({ feedback: true, feedbackMsg: 'Complete!' }))
-      .catch(err => {
-        // console.log(err.response.data.message);
-        if (err) this.setState({ feedbackMsg: 'Failed!' });
-      });
+    editItems(this);
+    this.props.loadProducts();
     this.setState({ open: false });
   }
 
@@ -118,9 +112,14 @@ EditItem.propTypes = propTypes;
 
 export default connect(
   state => ({
-    products: state.products
+    products: state.products,
+    categories: state.categories,
+    currencies: state.currencies
   }),
   dispatch => ({
-    editProduct: (data) => dispatch(editProduct(data))
+    editProduct: (data) => dispatch(editProduct(data)),
+    editCategory: (data) => dispatch(editCategory(data)),
+    editCurrency: (data) => dispatch(editCurrency(data)),
+    loadProducts: () => dispatch(getProducts())
   })
 )(EditItem);

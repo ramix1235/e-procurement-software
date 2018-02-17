@@ -8,4 +8,8 @@ module.exports = (app) => {
   app.post('/api/currency/addCurrency', (req, res) => {
     currencyController.addCurrency(req, res);
   });
+
+  app.post('/api/currency/editCurrency', (req, res) => {
+    currencyController.editCurrency(req, res);
+  });
 };

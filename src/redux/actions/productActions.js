@@ -27,22 +27,6 @@ export function addProduct(newProduct) {
   };
 }
 
-export function deleteProduct(deletingProduct) {
-  return dispatch => {
-    return axios
-      .post('/api/product/deleteProduct', {
-        product: deletingProduct
-      })
-      .then(products => {
-        dispatch({ type: 'DELETE_PRODUCT_SUCCESS', payload: products.data });
-        return products.data;
-      })
-      .catch(err => {
-        if (err) throw err;
-      });
-  };
-}
-
 export function editProduct(editingProduct) {
   return dispatch => {
     return axios
@@ -51,6 +35,22 @@ export function editProduct(editingProduct) {
       })
       .then(products => {
         dispatch({ type: 'EDIT_PRODUCT_SUCCESS', payload: products.data });
+        return products.data;
+      })
+      .catch(err => {
+        if (err) throw err;
+      });
+  };
+}
+
+export function deleteProduct(deletingProduct) {
+  return dispatch => {
+    return axios
+      .post('/api/product/deleteProduct', {
+        product: deletingProduct
+      })
+      .then(products => {
+        dispatch({ type: 'DELETE_PRODUCT_SUCCESS', payload: products.data });
         return products.data;
       })
       .catch(err => {

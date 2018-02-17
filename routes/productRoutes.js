@@ -9,11 +9,11 @@ module.exports = (app) => {
     productController.addProduct(req, res);
   });
 
-  app.post('/api/product/deleteProduct', (req, res) => {
-    productController.deleteProduct(req, res);
-  });
-
   app.post('/api/product/editProduct', (req, res) => {
     productController.editProduct(req, res);
+  });
+
+  app.post('/api/product/deleteProduct', (req, res) => {
+    productController.deleteProduct(req, res);
   });
 };
