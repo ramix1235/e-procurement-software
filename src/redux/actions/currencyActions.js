@@ -42,3 +42,20 @@ export function editCurrency(editingCurrency) {
       });
   };
 }
+
+
+export function deleteCurrency(deletingCurrency) {
+  return dispatch => {
+    return axios
+      .post('/api/currency/deleteCurrency', {
+        currency: deletingCurrency
+      })
+      .then(currencies => {
+        dispatch({ type: 'DELETE_CURRENCY_SUCCESS', payload: currencies.data });
+        return currencies.data;
+      })
+      .catch(err => {
+        if (err) throw err;
+      });
+  };
+}

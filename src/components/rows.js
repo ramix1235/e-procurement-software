@@ -326,3 +326,51 @@ exports.editItems = (context) => {
       });
   }
 };
+
+exports.deleteItems = (context) => {
+  switch (context.props.activeContent.value) {
+    case 'products': deleteProduct(); break;
+    case 'categories': deleteCategory(); break;
+    case 'currencies': deleteCurrency(); break;
+    default: break;
+  }
+
+  function deleteProduct() {
+    const deletingProduct = {
+      _id: context.props.data._id
+    };
+
+    context.props.deleteProduct(deletingProduct)
+      .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
+      .catch(err => {
+        // console.log(err.response.data.message);
+        if (err) context.setState({ feedbackMsg: 'Failed!' });
+      });
+  }
+
+  function deleteCategory() {
+    const deletingCategory = {
+      _id: context.props.data._id
+    };
+
+    context.props.deleteCategory(deletingCategory)
+      .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
+      .catch(err => {
+        // console.log(err.response.data.message);
+        if (err) context.setState({ feedbackMsg: 'Failed!' });
+      });
+  }
+
+  function deleteCurrency() {
+    const deletingCurrency = {
+      _id: context.props.data._id
+    };
+
+    context.props.deleteCurrency(deletingCurrency)
+      .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
+      .catch(err => {
+        // console.log(err.response.data.message);
+        if (err) context.setState({ feedbackMsg: 'Failed!' });
+      });
+  }
+};

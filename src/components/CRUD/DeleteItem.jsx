@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { deleteProduct  } from '../../redux/actions/productActions';
+import { deleteCategory  } from '../../redux/actions/categoryActions';
+import { deleteCurrency  } from '../../redux/actions/currencyActions';
+import { deleteItems } from '../rows';
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
 import Dialog from 'material-ui/Dialog';
@@ -10,7 +13,11 @@ const propTypes = {
   data: PropTypes.object,
   activeContent: PropTypes.object,
   products: PropTypes.array,
-  deleteProduct: PropTypes.func
+  deleteProduct: PropTypes.func,
+  categories: PropTypes.array,
+  deleteCategory: PropTypes.func,
+  currencies: PropTypes.array,
+  deleteCurrency: PropTypes.func
 };
 
 class DeleteItem extends Component {
@@ -37,16 +44,7 @@ class DeleteItem extends Component {
   }
 
   handleDeleteData = () => {
-    const deletingProduct = {
-      _id: this.props.data._id
-    };
-
-    this.props.deleteProduct(deletingProduct)
-      .then(this.setState({ feedback: true, feedbackMsg: 'Complete!' }))
-      .catch(err => {
-        // console.log(err.response.data.message);
-        if (err) this.setState({ feedbackMsg: 'Failed!' });
-      });
+    deleteItems(this);
     this.setState({ open: false });
   }
 
@@ -95,9 +93,13 @@ DeleteItem.propTypes = propTypes;
 
 export default connect(
   state => ({
-    products: state.products
+    products: state.products,
+    categories: state.categories,
+    currencies: state.currencies
   }),
   dispatch => ({
-    deleteProduct: (data) => dispatch(deleteProduct(data))
+    deleteProduct: (data) => dispatch(deleteProduct(data)),
+    deleteCategory: (data) => dispatch(deleteCategory(data)),
+    deleteCurrency: (data) => dispatch(deleteCurrency(data))
   })
 )(DeleteItem);

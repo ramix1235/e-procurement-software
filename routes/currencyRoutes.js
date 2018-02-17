@@ -12,4 +12,8 @@ module.exports = (app) => {
   app.post('/api/currency/editCurrency', (req, res) => {
     currencyController.editCurrency(req, res);
   });
+
+  app.post('/api/currency/deleteCurrency', (req, res) => {
+    currencyController.deleteCurrency(req, res);
+  });
 };

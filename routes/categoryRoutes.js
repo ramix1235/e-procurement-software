@@ -12,4 +12,8 @@ module.exports = (app) => {
   app.post('/api/category/editCategory', (req, res) => {
     categoryController.editCategory(req, res);
   });
+
+  app.post('/api/category/deleteCategory', (req, res) => {
+    categoryController.deleteCategory(req, res);
+  });
 };

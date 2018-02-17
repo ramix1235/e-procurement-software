@@ -49,6 +49,24 @@ class CurrencyController extends BaseController {
       this.getCurrencies(req, res);
     });
   }
+
+  static deleteCurrency(req, res) {
+    const deletingCurrency = {
+      _id: req.body.currency._id
+    };
+
+    Currency.findByIdAndRemove(deletingCurrency._id, (err, currency) => {
+      if (err) {
+        console.log('Delete failed!');
+        return res.status(400).send({
+          success: false,
+          message: 'failed'
+        });
+      }
+      console.log('Delete succesfully!');
+      this.getCurrencies(req, res);
+    });
+  }
 }
 
 module.exports = CurrencyController;

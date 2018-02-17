@@ -53,6 +53,24 @@ class CategoryController extends BaseController {
       this.getCategories(req, res);
     });
   }
+
+  static deleteCategory(req, res) {
+    const deletingCategory = {
+      _id: req.body.category._id
+    };
+
+    Category.findByIdAndRemove(deletingCategory._id, (err, category) => {
+      if (err) {
+        console.log('Delete failed!');
+        return res.status(400).send({
+          success: false,
+          message: 'failed'
+        });
+      }
+      console.log('Delete succesfully!');
+      this.getCategories(req, res);
+    });
+  }
 }
 
 module.exports = CategoryController;

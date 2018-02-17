@@ -42,3 +42,20 @@ export function editCategory(editingCategory) {
       });
   };
 }
+
+
+export function deleteCategory(deletingCategory) {
+  return dispatch => {
+    return axios
+      .post('/api/category/deleteCategory', {
+        category: deletingCategory
+      })
+      .then(categories => {
+        dispatch({ type: 'DELETE_CATEGORY_SUCCESS', payload: categories.data });
+        return categories.data;
+      })
+      .catch(err => {
+        if (err) throw err;
+      });
+  };
+}
