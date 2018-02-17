@@ -44,7 +44,7 @@ class EditItem extends Component {
   }
 
   handleDropDownCategories = (event, index, value) => {
-    this.setState({ itemData: { categoryBy: value, currencyBy: this.state.itemData.categoryBy, current: this.state.itemData.current } });
+    this.setState({ itemData: { categoryBy: value, currencyBy: this.state.itemData.currencyBy, current: this.state.itemData.current } });
   };
 
   handleDropDownCurrencies = (event, index, value) => {
