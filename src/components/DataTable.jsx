@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import RaisedButton from 'material-ui/RaisedButton';
-import AddItem from './AddItem';
+import AddItem from './CRUD/AddItem';
+import DeleteItem from './CRUD/DeleteItem';
+import EditItem from './CRUD/EditItem';
 import { rows, headerRows, menuItems, filters } from './rows';
 import {
   Table,
@@ -82,8 +83,8 @@ export default class DataTable extends Component {
                   <TableRowColumn>{index}</TableRowColumn>)
                   {rows(row, this.props.activeContent)}
                   <TableRowColumn>
-                    <FlatButton label='Edit'/>
-                    <FlatButton label='Delete'/>
+                    <EditItem />
+                    <DeleteItem data = {row} activeContent={this.props.activeContent}/>
                   </TableRowColumn>
                 </TableRow>
               ))}

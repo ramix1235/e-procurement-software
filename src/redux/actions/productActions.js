@@ -26,3 +26,19 @@ export function addProduct(newProduct) {
       });
   };
 }
+
+export function deleteProduct(deletingProduct) {
+  return dispatch => {
+    return axios
+      .post('/api/product/deleteProduct', {
+        product: deletingProduct
+      })
+      .then(products => {
+        dispatch({ type: 'DELETE_PRODUCT_SUCCESS', payload: products.data });
+        return products.data;
+      })
+      .catch(err => {
+        if (err) throw err;
+      });
+  };
+}

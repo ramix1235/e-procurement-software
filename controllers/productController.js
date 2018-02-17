@@ -30,12 +30,31 @@ class ProductController extends BaseController {
     newProduct.save((err, product) => {
       // if (err) return super.newError(400, err.message);
       if (err) {
+        console.log('Save failed!');
         return res.status(400).send({
           success: false,
           message: 'failed'
         });
       }
-      console.log(`Saved succesfully! - ${product.name}`);
+      console.log('Save succesfully!');
+      this.getProducts(req, res);
+    });
+  }
+
+  static deleteProduct(req, res) {
+    const deletingProduct = {
+      _id: req.body.product._id
+    };
+
+    Product.findByIdAndRemove(deletingProduct._id, (err, product) => {
+      if (err) {
+        console.log('Delete failed!');
+        return res.status(400).send({
+          success: false,
+          message: 'failed'
+        });
+      }
+      console.log('Delete succesfully!');
       this.getProducts(req, res);
     });
   }

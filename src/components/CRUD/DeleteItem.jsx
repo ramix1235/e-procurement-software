@@ -1,31 +1,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
-import Snackbar from 'material-ui/Snackbar';
 import { connect } from 'react-redux';
-import { addProduct  } from '../redux/actions/productActions';
-import { addFields } from './rows';
+import { deleteProduct  } from '../../redux/actions/productActions';
+import FlatButton from 'material-ui/FlatButton';
+import Snackbar from 'material-ui/Snackbar';
+import Dialog from 'material-ui/Dialog';
 
 const propTypes = {
   data: PropTypes.object,
   activeContent: PropTypes.object,
   products: PropTypes.array,
-  addProduct: PropTypes.func
+  deleteProduct: PropTypes.func
 };
 
-class AddItem extends Component {
+class DeleteItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
-      categoryBy: null,
-      currencyBy: null,
       feedback: false,
       feedbackMsg: 'Complete!'
     };
   }
+
 
   handleOpen = () => {
     this.setState({ open: true });
@@ -39,16 +36,12 @@ class AddItem extends Component {
     this.setState({ feedback: false });
   }
 
-  handleSaveData = () => {
-    const newProduct = {
-      name: document.getElementById(this.refs.nameField.uniqueId).value,
-      vendorCode: document.getElementById(this.refs.vendorCodeField.uniqueId).value,
-      category: this.state.categoryBy,
-      price: +document.getElementById(this.refs.priceField.uniqueId).value,
-      currency: this.state.currencyBy
+  handleDeleteData = () => {
+    const deletingProduct = {
+      _id: this.props.data._id
     };
 
-    this.props.addProduct(newProduct)
+    this.props.deleteProduct(deletingProduct)
       .then(this.setState({ feedback: true, feedbackMsg: 'Complete!' }))
       .catch(err => {
         // console.log(err.response.data.message);
@@ -57,14 +50,6 @@ class AddItem extends Component {
     this.setState({ open: false });
   }
 
-  handleDropDownCategories = (event, index, value) => {
-    this.setState({ categoryBy: value });
-  };
-
-  handleDropDownCurrencies = (event, index, value) => {
-    this.setState({ currencyBy: value });
-  };
-
   render() {
     const actions = [
       <FlatButton
@@ -72,7 +57,7 @@ class AddItem extends Component {
         key={0}
         primary
         // disabled
-        onClick={this.handleSaveData}
+        onClick={this.handleDeleteData}
       />,
       <FlatButton
         label='Discard'
@@ -84,20 +69,16 @@ class AddItem extends Component {
 
     return (
       <div className='element-inline'>
-        <RaisedButton label={`Add ${this.props.activeContent.single}`} onClick={this.handleOpen} />
+        <FlatButton label='Delete' onClick={this.handleOpen}/>
         <Dialog
-          title={`Add ${this.props.activeContent.single}`}
+          title={`Delete ${this.props.activeContent.single}`}
           actions={actions}
           modal
           open={this.state.open}
           onRequestClose={this.handleClose}
           autoScrollBodyContent
         >
-          {addFields(this.props,
-            this.state.categoryBy,
-            this.state.currencyBy,
-            this.handleDropDownCategories,
-            this.handleDropDownCurrencies)}
+          <span>Are you shure that you want to delete {this.props.data.name}?</span>
         </Dialog>
         <Snackbar
           open={this.state.feedback}
@@ -110,13 +91,13 @@ class AddItem extends Component {
   }
 }
 
-AddItem.propTypes = propTypes;
+DeleteItem.propTypes = propTypes;
 
 export default connect(
   state => ({
     products: state.products
   }),
   dispatch => ({
-    addProduct: (data) => dispatch(addProduct(data))
+    deleteProduct: (data) => dispatch(deleteProduct(data))
   })
-)(AddItem);
+)(DeleteItem);
