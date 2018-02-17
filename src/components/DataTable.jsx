@@ -4,17 +4,8 @@ import TextField from 'material-ui/TextField';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import RaisedButton from 'material-ui/RaisedButton';
 import AddItem from './CRUD/AddItem';
-import DeleteItem from './CRUD/DeleteItem';
-import EditItem from './CRUD/EditItem';
 import { rows, headerRows, menuItems, filters } from './rows';
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn
-} from 'material-ui/Table';
+import { Table, TableBody, TableHeader, TableRow } from 'material-ui/Table';
 
 const propTypes = {
   data: PropTypes.object,
@@ -63,9 +54,7 @@ export default class DataTable extends Component {
             enableSelectAll={false}
           >
             <TableRow>
-              <TableHeaderColumn tooltip='The ID'>ID</TableHeaderColumn>
               {headerRows(this.props.activeContent)}
-              <TableHeaderColumn tooltip='The Actions'>Actions</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody
@@ -80,12 +69,7 @@ export default class DataTable extends Component {
               this.state.searchBy)
               .map((row, index) => (
                 <TableRow key={index}>
-                  <TableRowColumn>{index}</TableRowColumn>)
-                  {rows(row, this.props.activeContent)}
-                  <TableRowColumn>
-                    <EditItem />
-                    <DeleteItem data = {row} activeContent={this.props.activeContent}/>
-                  </TableRowColumn>
+                  {rows(index, row, this.props)}
                 </TableRow>
               ))}
           </TableBody>

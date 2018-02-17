@@ -3,23 +3,43 @@ import { TableRowColumn, TableHeaderColumn } from 'material-ui/Table';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import DropDownMenu from 'material-ui/DropDownMenu';
+import DeleteItem from './CRUD/DeleteItem';
+import EditItem from './CRUD/EditItem';
 
-exports.rows = (row, activeContent) => {
+exports.rows = (index, row, data) => {
   const res = [];
 
-  switch (activeContent.value) {
+  switch (data.activeContent.value) {
     case 'products':
-      res.push(<TableRowColumn key={0}>{row.name}</TableRowColumn>);
-      res.push(<TableRowColumn key={1}>{row.vendorCode}</TableRowColumn>);
-      res.push(<TableRowColumn key={2}>{row.category.name}</TableRowColumn>);
-      res.push(<TableRowColumn key={3}>{row.price}</TableRowColumn>);
-      res.push(<TableRowColumn key={4}>{row.currency.name}</TableRowColumn>);
+      res.push(<TableRowColumn key={0}>{index}</TableRowColumn>);
+      res.push(<TableRowColumn key={1}>{row.name}</TableRowColumn>);
+      res.push(<TableRowColumn key={2}>{row.vendorCode}</TableRowColumn>);
+      res.push(<TableRowColumn key={3}>{row.category.name}</TableRowColumn>);
+      res.push(<TableRowColumn key={4}>{row.price}</TableRowColumn>);
+      res.push(<TableRowColumn key={5}>{row.currency.name}</TableRowColumn>);
+      res.push(<TableRowColumn key={6}>
+        <EditItem data = {data} currentItem={row} activeContent={data.activeContent}/>
+        <DeleteItem data = {row} activeContent={data.activeContent}/>
+      </TableRowColumn>
+      );
       break;
     case 'categories':
-      res.push(<TableRowColumn key={0}>{row.name}</TableRowColumn>);
+      res.push(<TableRowColumn key={0}>{index}</TableRowColumn>);
+      res.push(<TableRowColumn key={1}>{row.name}</TableRowColumn>);
+      res.push(<TableRowColumn key={2}>
+        <EditItem data = {data} currentItem={row} activeContent={data.activeContent}/>
+        <DeleteItem data = {row} activeContent={data.activeContent}/>
+      </TableRowColumn>
+      );
       break;
     case 'currencies':
+      res.push(<TableRowColumn key={1}>{index}</TableRowColumn>);
       res.push(<TableRowColumn key={0}>{row.name}</TableRowColumn>);
+      res.push(<TableRowColumn key={3}>
+        <EditItem data = {data} currentItem={row} activeContent={data.activeContent}/>
+        <DeleteItem data = {row} activeContent={data.activeContent}/>
+      </TableRowColumn>
+      );
       break;
     default: break;
   }
@@ -31,17 +51,23 @@ exports.headerRows = (activeContent) => {
 
   switch (activeContent.value) {
     case 'products':
-      res.push(<TableHeaderColumn key={0} tooltip='The Name'>Name</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={1} tooltip='The Vendor Code'>Vendor Code</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={2} tooltip='The Category'>Category</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={3} tooltip='The Price'>Price</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={4} tooltip='The Currency'>Currency</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={0} tooltip='The ID'>ID</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={1} tooltip='The Name'>Name</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={2} tooltip='The Vendor Code'>Vendor Code</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={3} tooltip='The Category'>Category</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={4} tooltip='The Price'>Price</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={5} tooltip='The Currency'>Currency</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={6} tooltip='The Actions'>Actions</TableHeaderColumn>);
       break;
     case 'categories':
-      res.push(<TableHeaderColumn key={0} tooltip='The Name'>Name</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={0} tooltip='The ID'>ID</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={1} tooltip='The Name'>Name</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={2} tooltip='The Actions'>Actions</TableHeaderColumn>);
       break;
     case 'currencies':
-      res.push(<TableHeaderColumn key={0} tooltip='The Name'>Name</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={0} tooltip='The ID'>ID</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={1} tooltip='The Name'>Name</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={2} tooltip='The Actions'>Actions</TableHeaderColumn>);
       break;
     default: break;
   }
@@ -112,7 +138,7 @@ exports.filters = (arr, activeContent, filtering, searchBy) => {
   }
 };
 
-exports.addFields = (data, categoryBy, currencyBy, handleDropDownCategories, handleDropDownCurrencies) => {
+exports.addFields = (data, itemData, handleDropDownCategories, handleDropDownCurrencies) => {
   switch (data.activeContent.value) {
     case 'products': return getProductsField();
     case 'categories': return getCategoriesField();
@@ -135,6 +161,7 @@ exports.addFields = (data, categoryBy, currencyBy, handleDropDownCategories, han
           floatingLabelText='Name'
           className='space-left-s'
           ref='nameField'
+          defaultValue={(itemData.current) ? itemData.current.name : ''}
         />
         <br />
         <TextField
@@ -142,9 +169,10 @@ exports.addFields = (data, categoryBy, currencyBy, handleDropDownCategories, han
           floatingLabelText='Vendor Code'
           className='space-left-s'
           ref='vendorCodeField'
+          defaultValue={(itemData.current) ? itemData.current.vendorCode : ''}
         />
         <br /><br />
-        <DropDownMenu value={categoryBy} onChange={handleDropDownCategories}>
+        <DropDownMenu value={itemData.categoryBy} onChange={handleDropDownCategories}>
           {categories}
         </DropDownMenu>
         <br />
@@ -154,8 +182,9 @@ exports.addFields = (data, categoryBy, currencyBy, handleDropDownCategories, han
           className='space-left-s'
           type='number'
           ref='priceField'
+          defaultValue={(itemData.current) ? itemData.current.price : ''}
         />
-        <DropDownMenu className='dropdown-xs' value={currencyBy} onChange={handleDropDownCurrencies}>
+        <DropDownMenu className='dropdown-xs' value={itemData.currencyBy} onChange={handleDropDownCurrencies}>
           {currencies}
         </DropDownMenu>
       </div>
@@ -169,6 +198,7 @@ exports.addFields = (data, categoryBy, currencyBy, handleDropDownCategories, han
           // errorText='This field is required'
           floatingLabelText='Name'
           className='space-left-s'
+          defaultValue={(itemData.current) ? itemData.current.name : ''}
         />
       </div>
     );
@@ -181,6 +211,7 @@ exports.addFields = (data, categoryBy, currencyBy, handleDropDownCategories, han
           // errorText='This field is required'
           floatingLabelText='Name'
           className='space-left-s'
+          defaultValue={(itemData.current) ? itemData.current.name : ''}
         />
       </div>
     );

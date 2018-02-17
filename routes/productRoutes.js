@@ -12,4 +12,8 @@ module.exports = (app) => {
   app.post('/api/product/deleteProduct', (req, res) => {
     productController.deleteProduct(req, res);
   });
+
+  app.post('/api/product/editProduct', (req, res) => {
+    productController.editProduct(req, res);
+  });
 };

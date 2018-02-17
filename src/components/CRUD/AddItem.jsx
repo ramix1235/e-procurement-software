@@ -20,8 +20,11 @@ class AddItem extends Component {
     super(props);
     this.state = {
       open: false,
-      categoryBy: null,
-      currencyBy: null,
+      itemData: {
+        categoryBy: null,
+        currencyBy: null,
+        current: null
+      },
       feedback: false,
       feedbackMsg: 'Complete!'
     };
@@ -43,9 +46,9 @@ class AddItem extends Component {
     const newProduct = {
       name: document.getElementById(this.refs.nameField.uniqueId).value,
       vendorCode: document.getElementById(this.refs.vendorCodeField.uniqueId).value,
-      category: this.state.categoryBy,
+      category: this.state.itemData.categoryBy,
       price: +document.getElementById(this.refs.priceField.uniqueId).value,
-      currency: this.state.currencyBy
+      currency: this.state.itemData.currencyBy
     };
 
     this.props.addProduct(newProduct)
@@ -58,11 +61,11 @@ class AddItem extends Component {
   }
 
   handleDropDownCategories = (event, index, value) => {
-    this.setState({ categoryBy: value });
+    this.setState({ itemData: { categoryBy: value, currencyBy: this.state.itemData.currencyBy, current: this.state.itemData.current } });
   };
 
   handleDropDownCurrencies = (event, index, value) => {
-    this.setState({ currencyBy: value });
+    this.setState({ itemData: { categoryBy: this.state.itemData.categoryBy, currencyBy: value, current: this.state.itemData.current } });
   };
 
   render() {
@@ -94,8 +97,7 @@ class AddItem extends Component {
           autoScrollBodyContent
         >
           {addFields(this.props,
-            this.state.categoryBy,
-            this.state.currencyBy,
+            this.state.itemData,
             this.handleDropDownCategories,
             this.handleDropDownCurrencies)}
         </Dialog>

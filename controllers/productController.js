@@ -41,6 +41,29 @@ class ProductController extends BaseController {
     });
   }
 
+  static editProduct(req, res) {
+    const editingProduct = new Product({
+      _id: req.body.product._id,
+      name: req.body.product.name,
+      vendorCode: req.body.product.vendorCode,
+      category: req.body.product.category,
+      price: req.body.product.price,
+      currency: req.body.product.currency
+    });
+
+    Product.findByIdAndUpdate(editingProduct._id, editingProduct, (err, product) => {
+      if (err) {
+        console.log('Edit failed!');
+        return res.status(400).send({
+          success: false,
+          message: 'failed'
+        });
+      }
+      console.log('Edit succesfully!');
+      this.getProducts(req, res);
+    });
+  }
+
   static deleteProduct(req, res) {
     const deletingProduct = {
       _id: req.body.product._id

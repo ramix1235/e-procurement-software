@@ -42,3 +42,19 @@ export function deleteProduct(deletingProduct) {
       });
   };
 }
+
+export function editProduct(editingProduct) {
+  return dispatch => {
+    return axios
+      .post('/api/product/editProduct', {
+        product: editingProduct
+      })
+      .then(products => {
+        dispatch({ type: 'EDIT_PRODUCT_SUCCESS', payload: products.data });
+        return products.data;
+      })
+      .catch(err => {
+        if (err) throw err;
+      });
+  };
+}
