@@ -11,6 +11,25 @@ class CurrencyController extends BaseController {
         console.log(err);
       });
   }
+
+  static addCurrency(req, res) {
+    const newCurrency = new Currency({
+      name: req.body.currency.name
+    });
+
+    newCurrency.save((err, currency) => {
+      // if (err) return super.newError(400, err.message);
+      if (err) {
+        console.log('Save failed!');
+        return res.status(400).send({
+          success: false,
+          message: 'failed'
+        });
+      }
+      console.log('Save succesfully!');
+      this.getCurrencies(req, res);
+    });
+  }
 }
 
 module.exports = CurrencyController;

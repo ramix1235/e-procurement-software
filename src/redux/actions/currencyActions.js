@@ -10,3 +10,19 @@ export function getCurrencies() {
       });
   };
 }
+
+export function addCurrency(newCurrency) {
+  return dispatch => {
+    return axios
+      .post('/api/currency/addCurrency', {
+        currency: newCurrency
+      })
+      .then(currencies => {
+        dispatch({ type: 'ADD_CURRENCY_SUCCESS', payload: currencies.data });
+        return currencies.data;
+      })
+      .catch(err => {
+        if (err) throw err;
+      });
+  };
+}

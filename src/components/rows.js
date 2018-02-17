@@ -198,6 +198,7 @@ exports.addFields = (data, itemData, handleDropDownCategories, handleDropDownCur
           // errorText='This field is required'
           floatingLabelText='Name'
           className='space-left-s'
+          ref='nameField'
           defaultValue={(itemData.current) ? itemData.current.name : ''}
         />
       </div>
@@ -211,9 +212,62 @@ exports.addFields = (data, itemData, handleDropDownCategories, handleDropDownCur
           // errorText='This field is required'
           floatingLabelText='Name'
           className='space-left-s'
+          ref='nameField'
           defaultValue={(itemData.current) ? itemData.current.name : ''}
         />
       </div>
     );
+  }
+};
+
+exports.addItems = (context) => {
+  switch (context.props.activeContent.value) {
+    case 'products': addProduct(); break;
+    case 'categories': addCategory(); break;
+    case 'currencies': addCurrency(); break;
+    default: break;
+  }
+
+  function addProduct() {
+    const newProduct = {
+      name: document.getElementById(context.refs.nameField.uniqueId).value,
+      vendorCode: document.getElementById(context.refs.vendorCodeField.uniqueId).value,
+      category: context.state.itemData.categoryBy,
+      price: +document.getElementById(context.refs.priceField.uniqueId).value,
+      currency: context.state.itemData.currencyBy
+    };
+
+    context.props.addProduct(newProduct)
+      .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
+      .catch(err => {
+        // console.log(err.response.data.message);
+        if (err) context.setState({ feedbackMsg: 'Failed!' });
+      });
+  }
+
+  function addCategory() {
+    const newCategory = {
+      name: document.getElementById(context.refs.nameField.uniqueId).value
+    };
+
+    context.props.addCategory(newCategory)
+      .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
+      .catch(err => {
+        // console.log(err.response.data.message);
+        if (err) context.setState({ feedbackMsg: 'Failed!' });
+      });
+  }
+
+  function addCurrency() {
+    const newCurrency = {
+      name: document.getElementById(context.refs.nameField.uniqueId).value
+    };
+
+    context.props.addCurrency(newCurrency)
+      .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
+      .catch(err => {
+        // console.log(err.response.data.message);
+        if (err) context.setState({ feedbackMsg: 'Failed!' });
+      });
   }
 };

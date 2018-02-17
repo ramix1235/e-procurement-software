@@ -6,13 +6,19 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
 import { connect } from 'react-redux';
 import { addProduct  } from '../../redux/actions/productActions';
-import { addFields } from '../rows';
+import { addCategory  } from '../../redux/actions/categoryActions';
+import { addCurrency  } from '../../redux/actions/currencyActions';
+import { addFields, addItems } from '../rows';
 
 const propTypes = {
   data: PropTypes.object,
   activeContent: PropTypes.object,
   products: PropTypes.array,
-  addProduct: PropTypes.func
+  addProduct: PropTypes.func,
+  categories: PropTypes.array,
+  addCategory: PropTypes.func,
+  currencies: PropTypes.array,
+  addCurrency: PropTypes.func
 };
 
 class AddItem extends Component {
@@ -43,20 +49,7 @@ class AddItem extends Component {
   }
 
   handleSaveData = () => {
-    const newProduct = {
-      name: document.getElementById(this.refs.nameField.uniqueId).value,
-      vendorCode: document.getElementById(this.refs.vendorCodeField.uniqueId).value,
-      category: this.state.itemData.categoryBy,
-      price: +document.getElementById(this.refs.priceField.uniqueId).value,
-      currency: this.state.itemData.currencyBy
-    };
-
-    this.props.addProduct(newProduct)
-      .then(this.setState({ feedback: true, feedbackMsg: 'Complete!' }))
-      .catch(err => {
-        // console.log(err.response.data.message);
-        if (err) this.setState({ feedbackMsg: 'Failed!' });
-      });
+    addItems(this);
     this.setState({ open: false });
   }
 
@@ -116,9 +109,13 @@ AddItem.propTypes = propTypes;
 
 export default connect(
   state => ({
-    products: state.products
+    products: state.products,
+    categories: state.categories,
+    currencies: state.currencies
   }),
   dispatch => ({
-    addProduct: (data) => dispatch(addProduct(data))
+    addProduct: (data) => dispatch(addProduct(data)),
+    addCategory: (data) => dispatch(addCategory(data)),
+    addCurrency: (data) => dispatch(addCurrency(data))
   })
 )(AddItem);

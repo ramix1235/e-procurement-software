@@ -10,3 +10,19 @@ export function getCategories() {
       });
   };
 }
+
+export function addCategory(newCategory) {
+  return dispatch => {
+    return axios
+      .post('/api/category/addCategory', {
+        category: newCategory
+      })
+      .then(categories => {
+        dispatch({ type: 'ADD_CATEGORY_SUCCESS', payload: categories.data });
+        return categories.data;
+      })
+      .catch(err => {
+        if (err) throw err;
+      });
+  };
+}
