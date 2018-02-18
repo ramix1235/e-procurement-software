@@ -36,7 +36,7 @@ export default class DataTable extends Component {
           {menuItems(this.props.activeContent)}
         </DropDownMenu>
         <TextField className='space-left-s' hintText='Search' onChange={this.handleDataTable}/>
-        <div className='right'>
+        <div className='right space-top-s'>
           <AddItem data={this.props.data} activeContent={this.props.activeContent}/>
           <RaisedButton className='space-left-s' label='History changes' disabled/>
         </div>
