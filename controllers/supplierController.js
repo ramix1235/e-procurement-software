@@ -35,6 +35,25 @@ class SupplierController extends BaseController {
           message: 'failed'
         });
       }
+
+      if (newSupplier.products.length) {
+        newSupplier.products.forEach(item => {
+          Product.findByIdAndUpdate(item,
+            { '$push': { 'suppliers': newSupplier._id } },
+            { 'new': true, 'upsert': true },
+            (err, product) => {
+              if (err) {
+                console.log('Save failed!');
+                return res.status(400).send({
+                  success: false,
+                  message: 'failed'
+                });
+              }
+            }
+          );
+        });
+      }
+
       console.log('Save succesfully!');
       this.getSuppliers(req, res);
     });

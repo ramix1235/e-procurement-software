@@ -201,6 +201,7 @@ exports.addFields = (data, itemData, handle, current) => {
       let isChecked = false;
 
       if (current) {
+        // console.log(current.suppliers);
         current.suppliers.forEach(currItem => {
           if (item._id === currItem._id) {
             isChecked = true;
@@ -294,11 +295,21 @@ exports.addFields = (data, itemData, handle, current) => {
 
   function getSuppliersField() {
     const products = data.data.products.map((item, i) => {
+      let isChecked = false;
+
+      if (current) {
+        current.products.forEach(currItem => {
+          if (item._id === currItem._id) {
+            isChecked = true;
+          }
+        });
+      }
+
       return (
         <div key={i}>
           <Divider />
           <ListItem
-            leftCheckbox={<Checkbox ref={`productField${i}`}/>}
+            leftCheckbox={<Checkbox ref={`productField${i}`} defaultChecked={isChecked}/>}
             primaryText={item.name}
             secondaryText={item.vendorCode}
           />

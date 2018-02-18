@@ -13,10 +13,10 @@ const propTypes = {
   data: PropTypes.object,
   activeContent: PropTypes.object,
   products: PropTypes.array,
-  deleteProduct: PropTypes.func,
   categories: PropTypes.array,
-  deleteCategory: PropTypes.func,
   currencies: PropTypes.array,
+  deleteProduct: PropTypes.func,
+  deleteCategory: PropTypes.func,
   deleteCurrency: PropTypes.func
 };
 

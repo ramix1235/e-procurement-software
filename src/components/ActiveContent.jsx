@@ -39,10 +39,22 @@ class ActiveContent extends Component {
     let singleVal;
 
     switch (index) {
-      case 'products': singleVal = 'product'; break;
-      case 'categories': singleVal = 'category'; break;
-      case 'currencies': singleVal = 'currency'; break;
-      case 'suppliers': singleVal = 'supplier'; break;
+      case 'products':
+        singleVal = 'product';
+        this.props.loadProducts();
+        break;
+      case 'categories':
+        singleVal = 'category';
+        this.props.loadCategories();
+        break;
+      case 'currencies':
+        singleVal = 'currency';
+        this.props.loadCurrencies();
+        break;
+      case 'suppliers':
+        singleVal = 'supplier';
+        this.props.loadSuppliers();
+        break;
       default: break;
     }
     this.setState({ activeContent: { value: index, label: index[0].toUpperCase() + index.slice(1), single: singleVal } });

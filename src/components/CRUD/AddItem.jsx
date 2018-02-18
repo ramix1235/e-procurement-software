@@ -15,12 +15,12 @@ const propTypes = {
   data: PropTypes.object,
   activeContent: PropTypes.object,
   products: PropTypes.array,
-  addProduct: PropTypes.func,
   categories: PropTypes.array,
-  addCategory: PropTypes.func,
   currencies: PropTypes.array,
-  addCurrency: PropTypes.func,
   suppliers: PropTypes.array,
+  addProduct: PropTypes.func,
+  addCategory: PropTypes.func,
+  addCurrency: PropTypes.func,
   addSupplier: PropTypes.func
 };
 

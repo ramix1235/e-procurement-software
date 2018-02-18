@@ -8,19 +8,17 @@ import { addFields, editItems } from '../rows';
 import { editProduct  } from '../../redux/actions/productActions';
 import { editCategory  } from '../../redux/actions/categoryActions';
 import { editCurrency  } from '../../redux/actions/currencyActions';
-import { getProducts  } from '../../redux/actions/productActions';
 
 const propTypes = {
   data: PropTypes.object,
   activeContent: PropTypes.object,
-  products: PropTypes.array,
-  editProduct: PropTypes.func,
-  categories: PropTypes.array,
-  editCategory: PropTypes.func,
-  currencies: PropTypes.array,
-  editCurrency: PropTypes.func,
   currentItem: PropTypes.object,
-  loadProducts: PropTypes.func
+  products: PropTypes.array,
+  categories: PropTypes.array,
+  currencies: PropTypes.array,
+  editProduct: PropTypes.func,
+  editCategory: PropTypes.func,
+  editCurrency: PropTypes.func
 };
 
 class EditItem extends Component {
@@ -51,17 +49,14 @@ class EditItem extends Component {
 
   handleDropDownCategories = (event, index, value) => {
     this.setState({ itemData: { categoryBy: value, currencyBy: this.state.itemData.currencyBy } });
-    // this.props.currentItem.category._id = value;
   };
 
   handleDropDownCurrencies = (event, index, value) => {
     this.setState({ itemData: { categoryBy: this.state.itemData.categoryBy, currencyBy: value } });
-    // this.props.currentItem.currency._id = value;
   };
 
   handleEditData = () => {
     editItems(this);
-    // this.props.loadProducts();
     this.setState({ open: false });
   }
 
@@ -124,7 +119,6 @@ export default connect(
   dispatch => ({
     editProduct: (data) => dispatch(editProduct(data)),
     editCategory: (data) => dispatch(editCategory(data)),
-    editCurrency: (data) => dispatch(editCurrency(data)),
-    loadProducts: () => dispatch(getProducts())
+    editCurrency: (data) => dispatch(editCurrency(data))
   })
 )(EditItem);
