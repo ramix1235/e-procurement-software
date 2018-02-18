@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import DropDownMenu from 'material-ui/DropDownMenu';
-import RaisedButton from 'material-ui/RaisedButton';
 import AddItem from './CRUD/AddItem';
 import { rows, headerRows, menuItems, filters } from './rows';
 import { Table, TableBody, TableHeader, TableRow } from 'material-ui/Table';
@@ -38,7 +37,6 @@ export default class DataTable extends Component {
         <TextField className='space-left-s' hintText='Search' onChange={this.handleDataTable}/>
         <div className='right space-top-s'>
           <AddItem data={this.props.data} activeContent={this.props.activeContent}/>
-          <RaisedButton className='space-left-s' label='History changes' disabled/>
         </div>
         <Table
           className='space-top-s'
