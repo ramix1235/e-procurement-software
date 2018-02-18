@@ -42,3 +42,19 @@ export function editSupplier(editingSupplier) {
       });
   };
 }
+
+export function deleteSupplier(deletingSupplier) {
+  return dispatch => {
+    return axios
+      .post('/api/supplier/deleteSupplier', {
+        supplier: deletingSupplier
+      })
+      .then(suppliers => {
+        dispatch({ type: 'DELETE_SUPPLIER_SUCCESS', payload: suppliers.data });
+        return suppliers.data;
+      })
+      .catch(err => {
+        if (err) throw err;
+      });
+  };
+}

@@ -130,6 +130,40 @@ class SupplierController extends BaseController {
       this.getSuppliers(req, res);
     });
   }
+
+  static deleteSupplier(req, res) {
+    const deletingSupplier = {
+      _id: req.body.supplier._id
+    };
+
+    Supplier.findByIdAndRemove(deletingSupplier._id, (err, supplier) => {
+      if (err) {
+        console.log('Delete failed!');
+        return res.status(400).send({
+          success: false,
+          message: 'failed'
+        });
+      }
+
+      supplier.products.forEach(item => {
+        Product.findByIdAndUpdate(item,
+          { '$pull': { 'suppliers': supplier._id } },
+          (err, product) => {
+            if (err) {
+              console.log('Delete failed!');
+              return res.status(400).send({
+                success: false,
+                message: 'failed'
+              });
+            }
+          }
+        );
+      });
+
+      console.log('Delete succesfully!');
+      this.getSuppliers(req, res);
+    });
+  }
 }
 
 module.exports = SupplierController;

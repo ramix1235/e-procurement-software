@@ -535,6 +535,7 @@ exports.deleteItems = (context) => {
     case 'products': deleteProduct(); break;
     case 'categories': deleteCategory(); break;
     case 'currencies': deleteCurrency(); break;
+    case 'suppliers': deleteSupplier(); break;
     default: break;
   }
 
@@ -570,6 +571,19 @@ exports.deleteItems = (context) => {
     };
 
     context.props.deleteCurrency(deletingCurrency)
+      .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
+      .catch(err => {
+        // console.log(err.response.data.message);
+        if (err) context.setState({ feedbackMsg: 'Failed!' });
+      });
+  }
+
+  function deleteSupplier() {
+    const deletingSupplier = {
+      _id: context.props.data._id
+    };
+
+    context.props.deleteSupplier(deletingSupplier)
       .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
       .catch(err => {
         // console.log(err.response.data.message);

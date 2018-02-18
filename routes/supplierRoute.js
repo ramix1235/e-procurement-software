@@ -12,4 +12,8 @@ module.exports = (app) => {
   app.post('/api/supplier/editSupplier', (req, res) => {
     supplierController.editSupplier(req, res);
   });
+
+  app.post('/api/supplier/deleteSupplier', (req, res) => {
+    supplierController.deleteSupplier(req, res);
+  });
 };

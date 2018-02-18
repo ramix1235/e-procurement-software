@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { deleteProduct  } from '../../redux/actions/productActions';
 import { deleteCategory  } from '../../redux/actions/categoryActions';
 import { deleteCurrency  } from '../../redux/actions/currencyActions';
+import { deleteSupplier  } from '../../redux/actions/supplierActions';
 import { deleteItems } from '../rows';
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
@@ -15,9 +16,11 @@ const propTypes = {
   products: PropTypes.array,
   categories: PropTypes.array,
   currencies: PropTypes.array,
+  suppliers: PropTypes.array,
   deleteProduct: PropTypes.func,
   deleteCategory: PropTypes.func,
-  deleteCurrency: PropTypes.func
+  deleteCurrency: PropTypes.func,
+  deleteSupplier:PropTypes.func
 };
 
 class DeleteItem extends Component {
@@ -95,11 +98,13 @@ export default connect(
   state => ({
     products: state.products,
     categories: state.categories,
-    currencies: state.currencies
+    currencies: state.currencies,
+    suppliers: state.suppliers
   }),
   dispatch => ({
     deleteProduct: (data) => dispatch(deleteProduct(data)),
     deleteCategory: (data) => dispatch(deleteCategory(data)),
-    deleteCurrency: (data) => dispatch(deleteCurrency(data))
+    deleteCurrency: (data) => dispatch(deleteCurrency(data)),
+    deleteSupplier: (data) => dispatch(deleteSupplier(data))
   })
 )(DeleteItem);
