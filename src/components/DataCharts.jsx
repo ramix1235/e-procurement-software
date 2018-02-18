@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
 import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Label } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Label, PieChart, Pie, Cell } from 'recharts';
 
 const propTypes = {
   data: PropTypes.object
@@ -14,21 +14,38 @@ export default class DataCharts extends Component {
   }
 
   render() {
-    const data = [];
+    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+    const numberOfProductsFromSuppliers = [];
+    const productCategories = [];
 
     this.props.data.suppliers.forEach(supplier => {
-      data.push({
+      numberOfProductsFromSuppliers.push({
         name: supplier.name,
         amount: supplier.products.length
       });
     });
-
+    this.props.data.categories.forEach(category => {
+      productCategories.push({
+        name: category.name,
+        amount: 0
+      });
+    });
+    this.props.data.products.forEach(product => {
+      productCategories.forEach(item => {
+        if (item.name === product.category.name) {
+          /* eslint-disable */
+          item.amount++;
+          /* eslint-enable*/
+        }
+      });
+    });
+    console.log(productCategories);
     return (
       <div>
         <Card>
-          <CardTitle title='Amount of products in suppiers' />
+          <CardTitle title='Number of products from suppliers' />
           <CardText>
-            <BarChart width={400} height={300} data={data}>
+            <BarChart width={400} height={300} data={numberOfProductsFromSuppliers}>
               <XAxis dataKey='name'>
                 <Label value='Suppliers' position='insideBottom' />
               </XAxis>
@@ -39,6 +56,21 @@ export default class DataCharts extends Component {
               <Tooltip/>
               <Bar dataKey='amount' fill='#8884d8' />
             </BarChart>
+          </CardText>
+          <CardActions>
+            <FlatButton label='Save' />
+            <FlatButton label='Print' />
+          </CardActions>
+        </Card>
+        <Card className='space-top-xs2'>
+          <CardTitle title='Product categories' />
+          <CardText>
+            <PieChart width={400} height={300}>
+              <Pie dataKey='amount' data={productCategories} cx={200} cy={130} innerRadius={50} outerRadius={100} fill='#8884d8' label>
+                {productCategories.map((entry, index) => <Cell key={index} fill={COLORS[index % COLORS.length]}/>)}
+              </Pie>
+              <Tooltip/>
+            </PieChart>
           </CardText>
           <CardActions>
             <FlatButton label='Save' />
