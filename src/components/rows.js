@@ -445,6 +445,7 @@ exports.editItems = (context) => {
     case 'products': editProduct(); break;
     case 'categories': editCategory(); break;
     case 'currencies': editCurrency(); break;
+    case 'suppliers': editSupplier(); break;
     default: break;
   }
 
@@ -496,6 +497,31 @@ exports.editItems = (context) => {
     };
 
     context.props.editCurrency(editingCurrency)
+      .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
+      .catch(err => {
+        // console.log(err.response.data.message);
+        if (err) context.setState({ feedbackMsg: 'Failed!' });
+      });
+  }
+
+  function editSupplier() {
+    const checkedProducts = [];
+
+    context.props.data.data.products.forEach((item, i) => {
+      if (context.refs[`productField${i}`].state.switched) {
+        checkedProducts.push(item._id);
+      }
+    });
+
+    const editingSupplier = {
+      _id: context.props.currentItem._id,
+      name: document.getElementById(context.refs.nameField.uniqueId).value,
+      address: document.getElementById(context.refs.addressField.uniqueId).value,
+      telephone: document.getElementById(context.refs.telephoneField.uniqueId).value,
+      products: checkedProducts
+    };
+
+    context.props.editSupplier(editingSupplier)
       .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
       .catch(err => {
         // console.log(err.response.data.message);

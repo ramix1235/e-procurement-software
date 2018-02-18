@@ -8,6 +8,7 @@ import { addFields, editItems } from '../rows';
 import { editProduct  } from '../../redux/actions/productActions';
 import { editCategory  } from '../../redux/actions/categoryActions';
 import { editCurrency  } from '../../redux/actions/currencyActions';
+import { editSupplier  } from '../../redux/actions/supplierActions';
 
 const propTypes = {
   data: PropTypes.object,
@@ -18,7 +19,8 @@ const propTypes = {
   currencies: PropTypes.array,
   editProduct: PropTypes.func,
   editCategory: PropTypes.func,
-  editCurrency: PropTypes.func
+  editCurrency: PropTypes.func,
+  editSupplier: PropTypes.func
 };
 
 class EditItem extends Component {
@@ -119,6 +121,7 @@ export default connect(
   dispatch => ({
     editProduct: (data) => dispatch(editProduct(data)),
     editCategory: (data) => dispatch(editCategory(data)),
-    editCurrency: (data) => dispatch(editCurrency(data))
+    editCurrency: (data) => dispatch(editCurrency(data)),
+    editSupplier: (data) => dispatch(editSupplier(data))
   })
 )(EditItem);

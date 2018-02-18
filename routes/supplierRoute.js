@@ -9,4 +9,7 @@ module.exports = (app) => {
     supplierController.addSupplier(req, res);
   });
 
+  app.post('/api/supplier/editSupplier', (req, res) => {
+    supplierController.editSupplier(req, res);
+  });
 };

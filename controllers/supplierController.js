@@ -40,7 +40,7 @@ class SupplierController extends BaseController {
         newSupplier.products.forEach(item => {
           Product.findByIdAndUpdate(item,
             { '$push': { 'suppliers': newSupplier._id } },
-            { 'new': true, 'upsert': true },
+            // { 'new': true, 'upsert': true },
             (err, product) => {
               if (err) {
                 console.log('Save failed!');
@@ -55,6 +55,63 @@ class SupplierController extends BaseController {
       }
 
       console.log('Save succesfully!');
+      this.getSuppliers(req, res);
+    });
+  }
+
+  static editSupplier(req, res) {
+    const editingSupplier = new Supplier({
+      _id: req.body.supplier._id,
+      name: req.body.supplier.name,
+      address: req.body.supplier.address,
+      telephone: req.body.supplier.telephone,
+      products: req.body.supplier.products
+    });
+
+    Supplier.findByIdAndUpdate(editingSupplier._id, editingSupplier, (err, supplier) => {
+      if (err) {
+        console.log('Edit failed!');
+        return res.status(400).send({
+          success: false,
+          message: 'failed'
+        });
+      }
+
+      supplier.products.forEach(item => {
+        Product.findByIdAndUpdate(item,
+          { '$pull': { 'suppliers': supplier._id } },
+          // { 'new': true, 'upsert': true },
+          (err, product) => {
+            if (err) {
+              console.log('Edit failed!');
+              return res.status(400).send({
+                success: false,
+                message: 'failed'
+              });
+            }
+          }
+        );
+      });
+
+      if (editingSupplier.products.length) {
+        editingSupplier.products.forEach(item => {
+          Product.findByIdAndUpdate(item,
+            { '$push': { 'suppliers': editingSupplier._id } },
+            // { 'new': true, 'upsert': true },
+            (err, product) => {
+              if (err) {
+                console.log('Edit failed!');
+                return res.status(400).send({
+                  success: false,
+                  message: 'failed'
+                });
+              }
+            }
+          );
+        });
+      }
+
+      console.log('Edit succesfully!');
       this.getSuppliers(req, res);
     });
   }

@@ -54,7 +54,7 @@ class ProductController extends BaseController {
       newProduct.suppliers.forEach(item => {
         Supplier.findByIdAndUpdate(item,
           { '$push': { 'products': newProduct._id } },
-          { 'new': true, 'upsert': true },
+          // { 'new': true, 'upsert': true },
           (err, supplier) => {
             if (err) {
               console.log('Save failed!');
@@ -102,8 +102,8 @@ class ProductController extends BaseController {
 
       product.suppliers.forEach(item => {
         Supplier.findByIdAndUpdate(item,
-          { '$pop': { 'products': product._id } },
-          { 'new': true, 'upsert': true },
+          { '$pull': { 'products': product._id } },
+          // { 'new': true, 'upsert': true },
           (err, supplier) => {
             if (err) {
               console.log('Edit failed!');
@@ -153,8 +153,8 @@ class ProductController extends BaseController {
 
       product.suppliers.forEach(item => {
         Supplier.findByIdAndUpdate(item,
-          { '$pop': { 'products': product._id } },
-          { 'new': true, 'upsert': true },
+          { '$pull': { 'products': product._id } },
+          // { 'new': true, 'upsert': true },
           (err, supplier) => {
             if (err) {
               console.log('Delete failed!');

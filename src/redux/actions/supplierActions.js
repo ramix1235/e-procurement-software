@@ -26,3 +26,19 @@ export function addSupplier(newSupplier) {
       });
   };
 }
+
+export function editSupplier(editingSupplier) {
+  return dispatch => {
+    return axios
+      .post('/api/supplier/editSupplier', {
+        supplier: editingSupplier
+      })
+      .then(suppliers => {
+        dispatch({ type: 'EDIT_SUPPLIER_SUCCESS', payload: suppliers.data });
+        return suppliers.data;
+      })
+      .catch(err => {
+        if (err) throw err;
+      });
+  };
+}
