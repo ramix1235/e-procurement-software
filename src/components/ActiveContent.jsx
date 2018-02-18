@@ -6,14 +6,17 @@ import { connect } from 'react-redux';
 import { getProducts  } from '../redux/actions/productActions';
 import { getCategories  } from '../redux/actions/categoryActions';
 import { getCurrencies  } from '../redux/actions/currencyActions';
+import { getSuppliers  } from '../redux/actions/supplierActions';
 
 const propTypes = {
   products: PropTypes.array,
   categories: PropTypes.array,
   currencies: PropTypes.array,
+  suppliers: PropTypes.array,
   loadProducts: PropTypes.func,
   loadCategories: PropTypes.func,
-  loadCurrencies: PropTypes.func
+  loadCurrencies: PropTypes.func,
+  loadSuppliers: PropTypes.func
 };
 
 class ActiveContent extends Component {
@@ -28,6 +31,7 @@ class ActiveContent extends Component {
     this.props.loadProducts();
     this.props.loadCategories();
     this.props.loadCurrencies();
+    this.props.loadSuppliers();
     // this.props[`load${this.state.activeContent.label}`]();
   }
 
@@ -65,11 +69,10 @@ class ActiveContent extends Component {
           <RadioButton
             value='suppliers'
             label='Suppliers'
-            disabled
             className='radio-btn'
           />
         </RadioButtonGroup>
-        <DataTable data={this.props} activeContent={this.state.activeContent}/>
+        <DataTable data={this.props} activeContent={this.state.activeContent} />
       </div>
     );
   }
@@ -81,11 +84,13 @@ export default connect(
   state => ({
     products: state.products,
     categories: state.categories,
-    currencies: state.currencies
+    currencies: state.currencies,
+    suppliers: state.suppliers
   }),
   dispatch => ({
     loadProducts: () => dispatch(getProducts()),
     loadCategories: () => dispatch(getCategories()),
-    loadCurrencies: () => dispatch(getCurrencies())
+    loadCurrencies: () => dispatch(getCurrencies()),
+    loadSuppliers: () => dispatch(getSuppliers())
   })
 )(ActiveContent);

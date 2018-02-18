@@ -29,9 +29,8 @@ class EditItem extends Component {
     this.state = {
       open: false,
       itemData: {
-        categoryBy: (this.props.currentItem.category) ? this.props.currentItem.category._id : null,
-        currencyBy: (this.props.currentItem.currency) ? this.props.currentItem.currency._id : null,
-        current: (this.props.currentItem) ? this.props.currentItem : null
+        categoryBy: this.props.currentItem.category ? this.props.currentItem.category._id : null,
+        currencyBy: this.props.currentItem.currency ? this.props.currentItem.currency._id : null
       },
       feedback: false,
       feedbackMsg: 'Complete!'
@@ -51,16 +50,18 @@ class EditItem extends Component {
   }
 
   handleDropDownCategories = (event, index, value) => {
-    this.setState({ itemData: { categoryBy: value, currencyBy: this.state.itemData.currencyBy, current: this.state.itemData.current } });
+    this.setState({ itemData: { categoryBy: value, currencyBy: this.state.itemData.currencyBy } });
+    // this.props.currentItem.category._id = value;
   };
 
   handleDropDownCurrencies = (event, index, value) => {
-    this.setState({ itemData: { categoryBy: this.state.itemData.categoryBy, currencyBy: value, current: this.state.itemData.current } });
+    this.setState({ itemData: { categoryBy: this.state.itemData.categoryBy, currencyBy: value } });
+    // this.props.currentItem.currency._id = value;
   };
 
   handleEditData = () => {
     editItems(this);
-    this.props.loadProducts();
+    // this.props.loadProducts();
     this.setState({ open: false });
   }
 
@@ -94,8 +95,12 @@ class EditItem extends Component {
         >
           {addFields(this.props.data,
             this.state.itemData,
-            this.handleDropDownCategories,
-            this.handleDropDownCurrencies)}
+            {
+              handleDropDownCategories: this.handleDropDownCategories,
+              handleDropDownCurrencies: this.handleDropDownCurrencies
+            },
+            this.props.currentItem
+          )}
         </Dialog>
         <Snackbar
           open={this.state.feedback}

@@ -15,10 +15,10 @@ const supplierSchema = new Schema({
     type: String,
     required: true
   },
-  products: {
-    type: [ [Schema.Types.ObjectId] ],
-    required: true
-  }
+  products: [ {
+    type: Schema.Types.ObjectId,
+    ref: 'products'
+  } ]
 }, {
   versionKey: false
 });

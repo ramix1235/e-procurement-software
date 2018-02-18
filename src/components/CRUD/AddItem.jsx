@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { addProduct  } from '../../redux/actions/productActions';
 import { addCategory  } from '../../redux/actions/categoryActions';
 import { addCurrency  } from '../../redux/actions/currencyActions';
+import { addSupplier  } from '../../redux/actions/supplierActions';
 import { addFields, addItems } from '../rows';
 
 const propTypes = {
@@ -18,7 +19,9 @@ const propTypes = {
   categories: PropTypes.array,
   addCategory: PropTypes.func,
   currencies: PropTypes.array,
-  addCurrency: PropTypes.func
+  addCurrency: PropTypes.func,
+  suppliers: PropTypes.array,
+  addSupplier: PropTypes.func
 };
 
 class AddItem extends Component {
@@ -28,8 +31,7 @@ class AddItem extends Component {
       open: false,
       itemData: {
         categoryBy: null,
-        currencyBy: null,
-        current: null
+        currencyBy: null
       },
       feedback: false,
       feedbackMsg: 'Complete!'
@@ -54,11 +56,11 @@ class AddItem extends Component {
   }
 
   handleDropDownCategories = (event, index, value) => {
-    this.setState({ itemData: { categoryBy: value, currencyBy: this.state.itemData.currencyBy, current: this.state.itemData.current } });
+    this.setState({ itemData: { categoryBy: value, currencyBy: this.state.itemData.currencyBy } });
   };
 
   handleDropDownCurrencies = (event, index, value) => {
-    this.setState({ itemData: { categoryBy: this.state.itemData.categoryBy, currencyBy: value, current: this.state.itemData.current } });
+    this.setState({ itemData: { categoryBy: this.state.itemData.categoryBy, currencyBy: value } });
   };
 
   render() {
@@ -91,8 +93,12 @@ class AddItem extends Component {
         >
           {addFields(this.props,
             this.state.itemData,
-            this.handleDropDownCategories,
-            this.handleDropDownCurrencies)}
+            {
+              handleDropDownCategories: this.handleDropDownCategories,
+              handleDropDownCurrencies: this.handleDropDownCurrencies
+            },
+            null
+          )}
         </Dialog>
         <Snackbar
           open={this.state.feedback}
@@ -111,11 +117,13 @@ export default connect(
   state => ({
     products: state.products,
     categories: state.categories,
-    currencies: state.currencies
+    currencies: state.currencies,
+    suppliers: state.suppliers
   }),
   dispatch => ({
     addProduct: (data) => dispatch(addProduct(data)),
     addCategory: (data) => dispatch(addCategory(data)),
-    addCurrency: (data) => dispatch(addCurrency(data))
+    addCurrency: (data) => dispatch(addCurrency(data)),
+    addSupplier: (data) => dispatch(addSupplier(data))
   })
 )(AddItem);

@@ -25,7 +25,12 @@ const productSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: true,
     ref: 'currencies'
-  }
+  },
+  suppliers: [ {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'suppliers'
+  } ]
 }, {
   versionKey: false
 });
