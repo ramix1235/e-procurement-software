@@ -14,13 +14,6 @@ class ProductController extends BaseController {
         if (err) throw err;
         res.send(products);
       });
-    // Product.find({})
-    //   .then(products => {
-    //     res.send(products);
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
   }
 
   static addProduct(req, res) {
@@ -54,7 +47,6 @@ class ProductController extends BaseController {
       newProduct.suppliers.forEach(item => {
         Supplier.findByIdAndUpdate(item,
           { '$push': { 'products': newProduct._id } },
-          // { 'new': true, 'upsert': true },
           (err, supplier) => {
             if (err) {
               console.log('Save failed!');
@@ -99,11 +91,10 @@ class ProductController extends BaseController {
           message: 'failed'
         });
       }
-
+      // console.log(product.suppliers);
       product.suppliers.forEach(item => {
         Supplier.findByIdAndUpdate(item,
           { '$pull': { 'products': product._id } },
-          // { 'new': true, 'upsert': true },
           (err, supplier) => {
             if (err) {
               console.log('Edit failed!');
@@ -154,7 +145,6 @@ class ProductController extends BaseController {
       product.suppliers.forEach(item => {
         Supplier.findByIdAndUpdate(item,
           { '$pull': { 'products': product._id } },
-          // { 'new': true, 'upsert': true },
           (err, supplier) => {
             if (err) {
               console.log('Delete failed!');

@@ -40,7 +40,6 @@ class SupplierController extends BaseController {
         newSupplier.products.forEach(item => {
           Product.findByIdAndUpdate(item,
             { '$push': { 'suppliers': newSupplier._id } },
-            // { 'new': true, 'upsert': true },
             (err, product) => {
               if (err) {
                 console.log('Save failed!');
@@ -68,6 +67,24 @@ class SupplierController extends BaseController {
       products: req.body.supplier.products
     });
 
+    // Supplier.findById(editingSupplier._id)
+    //   .populate({
+    //     path: 'products',
+    //     model: Product
+    //   })
+    //   .exec((err, supplier) => {
+    //     if (err) throw err;
+    //     supplier.products.forEach(product => {
+    //       if (product.suppliers.length < 2) {
+    //         console.log('Edit failed!');
+    //         return res.status(400).send({
+    //           success: false,
+    //           message: 'failed'
+    //         });
+    //       }
+    //     });
+    //   });
+
     Supplier.findByIdAndUpdate(editingSupplier._id, editingSupplier, (err, supplier) => {
       if (err) {
         console.log('Edit failed!');
@@ -76,11 +93,10 @@ class SupplierController extends BaseController {
           message: 'failed'
         });
       }
-
+      // console.log(supplier.products);
       supplier.products.forEach(item => {
         Product.findByIdAndUpdate(item,
           { '$pull': { 'suppliers': supplier._id } },
-          // { 'new': true, 'upsert': true },
           (err, product) => {
             if (err) {
               console.log('Edit failed!');
@@ -97,7 +113,6 @@ class SupplierController extends BaseController {
         editingSupplier.products.forEach(item => {
           Product.findByIdAndUpdate(item,
             { '$push': { 'suppliers': editingSupplier._id } },
-            // { 'new': true, 'upsert': true },
             (err, product) => {
               if (err) {
                 console.log('Edit failed!');
