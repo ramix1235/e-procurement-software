@@ -1,40 +1,57 @@
+/* eslint-disable no-underscore-dangle */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
+import { editProduct } from '../../redux/actions/productActions';
+import { editCategory } from '../../redux/actions/categoryActions';
+import { editCurrency } from '../../redux/actions/currencyActions';
+import { editSupplier } from '../../redux/actions/supplierActions';
+
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
 import Dialog from 'material-ui/Dialog';
 import { addFields, editItems } from '../rows';
-import { editProduct  } from '../../redux/actions/productActions';
-import { editCategory  } from '../../redux/actions/categoryActions';
-import { editCurrency  } from '../../redux/actions/currencyActions';
-import { editSupplier  } from '../../redux/actions/supplierActions';
 
-const propTypes = {
-  data: PropTypes.object,
-  activeContent: PropTypes.object,
-  currentItem: PropTypes.object,
-  products: PropTypes.array,
-  categories: PropTypes.array,
-  currencies: PropTypes.array,
-  editProduct: PropTypes.func,
-  editCategory: PropTypes.func,
-  editCurrency: PropTypes.func,
-  editSupplier: PropTypes.func
-};
+@connect(state => ({
+  products: state.products,
+  categories: state.categories,
+  currencies: state.currencies,
+  suppliers: state.suppliers,
+}))
+export default class EditItem extends Component {
+  static propTypes = {
+    categories: PropTypes.array.isRequired,
+    currencies: PropTypes.array.isRequired,
+    products: PropTypes.array.isRequired,
+    suppliers: PropTypes.array.isRequired,
+    activeContent: PropTypes.object,
+    currentItem: PropTypes.object,
+    data: PropTypes.object,
+    editCategory: PropTypes.func,
+    editCurrency: PropTypes.func,
+    editProduct: PropTypes.func,
+    editSupplier: PropTypes.func,
+  }
 
-class EditItem extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      open: false,
-      itemData: {
-        categoryBy: this.props.currentItem.category ? this.props.currentItem.category._id : null,
-        currencyBy: this.props.currentItem.currency ? this.props.currentItem.currency._id : null
-      },
-      feedback: false,
-      feedbackMsg: 'Complete!'
-    };
+  static defaultProps = {
+    data: {},
+    activeContent: {},
+    currentItem: {},
+    editProduct,
+    editCategory,
+    editCurrency,
+    editSupplier,
+  }
+
+  state = {
+    open: false,
+    itemData: {
+      categoryBy: this.props.currentItem.category ? this.props.currentItem.category._id : null,
+      currencyBy: this.props.currentItem.currency ? this.props.currentItem.currency._id : null,
+    },
+    feedback: false,
+    feedbackMsg: 'Complete!',
   }
 
   handleOpen = () => {
@@ -63,45 +80,57 @@ class EditItem extends Component {
   }
 
   render() {
+    const {
+      open,
+      feedback,
+      feedbackMsg,
+      itemData,
+    } = this.state;
+    const {
+      activeContent,
+      data,
+      currentItem,
+    } = this.props;
     const actions = [
       <FlatButton
-        label='Ok'
         key={0}
+        label="Ok"
         primary
         // disabled
         onClick={this.handleEditData}
       />,
       <FlatButton
-        label='Discard'
         key={1}
+        label="Discard"
         primary
         onClick={this.handleClose}
-      />
+      />,
     ];
 
     return (
-      <div className='element-inline'>
-        <FlatButton label='Edit' onClick={this.handleOpen}/>
+      <div className="element-inline">
+        <FlatButton label="Edit" onClick={this.handleOpen} />
         <Dialog
-          title={`Edit ${this.props.activeContent.single}`}
+          title={`Edit ${activeContent.single}`}
           actions={actions}
           modal
-          open={this.state.open}
+          open={open}
           onRequestClose={this.handleClose}
           autoScrollBodyContent
         >
-          {addFields(this.props.data,
-            this.state.itemData,
+          {addFields(
+            data,
+            itemData,
             {
               handleDropDownCategories: this.handleDropDownCategories,
-              handleDropDownCurrencies: this.handleDropDownCurrencies
+              handleDropDownCurrencies: this.handleDropDownCurrencies,
             },
-            this.props.currentItem
+            currentItem
           )}
         </Dialog>
         <Snackbar
-          open={this.state.feedback}
-          message={this.state.feedbackMsg}
+          open={feedback}
+          message={feedbackMsg}
           autoHideDuration={4000}
           onRequestClose={this.handleRequestClose}
         />
@@ -110,18 +139,3 @@ class EditItem extends Component {
   }
 }
 
-EditItem.propTypes = propTypes;
-
-export default connect(
-  state => ({
-    products: state.products,
-    categories: state.categories,
-    currencies: state.currencies
-  }),
-  dispatch => ({
-    editProduct: (data) => dispatch(editProduct(data)),
-    editCategory: (data) => dispatch(editCategory(data)),
-    editCurrency: (data) => dispatch(editCurrency(data)),
-    editSupplier: (data) => dispatch(editSupplier(data))
-  })
-)(EditItem);

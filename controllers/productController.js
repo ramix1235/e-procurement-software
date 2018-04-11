@@ -1,21 +1,9 @@
-const BaseController = require('./baseController');
-const Product = require('../models/product');
-const Supplier = require('../models/supplier');
+/* eslint-disable no-underscore-dangle */
+import BaseController from './baseController';
+import Product from '../models/product';
+import Supplier from '../models/supplier';
 
-class ProductController extends BaseController {
-  static getProducts(req, res) {
-    Product.find({})
-      .populate('category currency')
-      .populate({
-        path: 'suppliers',
-        model: Supplier
-      })
-      .exec((err, products) => {
-        if (err) throw err;
-        res.send(products);
-      });
-  }
-
+export default class ProductController extends BaseController {
   static addProduct(req, res) {
     const newProduct = new Product({
       name: req.body.product.name,
@@ -23,14 +11,14 @@ class ProductController extends BaseController {
       category: req.body.product.category,
       price: req.body.product.price,
       currency: req.body.product.currency,
-      suppliers: req.body.product.suppliers
+      suppliers: req.body.product.suppliers,
     });
 
     if (!newProduct.suppliers.length) {
       console.log('Save failed!');
       return res.status(400).send({
         success: false,
-        message: 'failed'
+        message: 'failed',
       });
     }
 
@@ -40,28 +28,32 @@ class ProductController extends BaseController {
         console.log('Save failed!');
         return res.status(400).send({
           success: false,
-          message: 'failed'
+          message: 'failed',
         });
       }
 
-      newProduct.suppliers.forEach(item => {
-        Supplier.findByIdAndUpdate(item,
-          { '$push': { 'products': newProduct._id } },
-          (err, supplier) => {
-            if (err) {
+      newProduct.suppliers.forEach((item) => {
+        Supplier.findByIdAndUpdate(
+          item,
+          { $push: { products: newProduct._id } },
+          (error, supplier) => {
+            if (error) {
               console.log('Save failed!');
               return res.status(400).send({
                 success: false,
-                message: 'failed'
+                message: 'failed',
               });
             }
+            return res;
           }
         );
       });
 
-      console.log('Save succesfully!');
+      console.log('Save successfully!');
       this.getProducts(req, res);
+      return res;
     });
+    return res;
   }
 
   static editProduct(req, res) {
@@ -72,14 +64,14 @@ class ProductController extends BaseController {
       category: req.body.product.category,
       price: req.body.product.price,
       currency: req.body.product.currency,
-      suppliers: req.body.product.suppliers
+      suppliers: req.body.product.suppliers,
     });
 
     if (!editingProduct.suppliers.length) {
       console.log('Save failed!');
       return res.status(400).send({
         success: false,
-        message: 'failed'
+        message: 'failed',
       });
     }
 
@@ -88,49 +80,55 @@ class ProductController extends BaseController {
         console.log('Edit failed!');
         return res.status(400).send({
           success: false,
-          message: 'failed'
+          message: 'failed',
         });
       }
       // console.log(product.suppliers);
-      product.suppliers.forEach(item => {
-        Supplier.findByIdAndUpdate(item,
-          { '$pull': { 'products': product._id } },
-          (err, supplier) => {
-            if (err) {
+      product.suppliers.forEach((item) => {
+        Supplier.findByIdAndUpdate(
+          item,
+          { $pull: { products: product._id } },
+          (error, supplier) => {
+            if (error) {
               console.log('Edit failed!');
               return res.status(400).send({
                 success: false,
-                message: 'failed'
+                message: 'failed',
               });
             }
+            return res;
           }
         );
       });
 
-      editingProduct.suppliers.forEach(item => {
-        Supplier.findByIdAndUpdate(item,
-          { '$push': { 'products': editingProduct._id } },
-          { 'new': true, 'upsert': true },
-          (err, supplier) => {
-            if (err) {
+      editingProduct.suppliers.forEach((item) => {
+        Supplier.findByIdAndUpdate(
+          item,
+          { $push: { products: editingProduct._id } },
+          { new: true, upsert: true },
+          (error, supplier) => {
+            if (error) {
               console.log('Edit failed!');
               return res.status(400).send({
                 success: false,
-                message: 'failed'
+                message: 'failed',
               });
             }
+            return res;
           }
         );
       });
 
-      console.log('Edit succesfully!');
+      console.log('Edit successfully!');
       this.getProducts(req, res);
+      return res;
     });
+    return res;
   }
 
   static deleteProduct(req, res) {
     const deletingProduct = {
-      _id: req.body.product._id
+      _id: req.body.product._id,
     };
 
     Product.findByIdAndRemove(deletingProduct._id, (err, product) => {
@@ -138,29 +136,43 @@ class ProductController extends BaseController {
         console.log('Delete failed!');
         return res.status(400).send({
           success: false,
-          message: 'failed'
+          message: 'failed',
         });
       }
 
-      product.suppliers.forEach(item => {
-        Supplier.findByIdAndUpdate(item,
-          { '$pull': { 'products': product._id } },
-          (err, supplier) => {
-            if (err) {
+      product.suppliers.forEach((item) => {
+        Supplier.findByIdAndUpdate(
+          item,
+          { $pull: { products: product._id } },
+          (error, supplier) => {
+            if (error) {
               console.log('Delete failed!');
               return res.status(400).send({
                 success: false,
-                message: 'failed'
+                message: 'failed',
               });
             }
+            return res;
           }
         );
       });
 
-      console.log('Delete succesfully!');
+      console.log('Delete successfully!');
       this.getProducts(req, res);
+      return res;
     });
   }
-}
 
-module.exports = ProductController;
+  static getProducts(req, res) {
+    Product.find({})
+      .populate('category currency')
+      .populate({
+        path: 'suppliers',
+        model: Supplier,
+      })
+      .exec((err, products) => {
+        if (err) throw err;
+        res.send(products);
+      });
+  }
+}

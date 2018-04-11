@@ -1,26 +1,33 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose, { Schema } from 'mongoose';
 
 const supplierSchema = new Schema({
   name: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   address: {
     type: String,
-    required: true
+    required: true,
   },
   telephone: {
     type: String,
-    required: true
+    required: true,
   },
-  products: [ {
-    type: Schema.Types.ObjectId,
-    ref: 'products'
-  } ]
+  products: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Product',
+    },
+  ],
 }, {
-  versionKey: false
+  versionKey: false,
 });
 
-module.exports = mongoose.model('suppliers', supplierSchema);
+const Supplier = mongoose.model(
+  'Supplier',
+  supplierSchema,
+  'suppliers'
+);
+
+export default Supplier;

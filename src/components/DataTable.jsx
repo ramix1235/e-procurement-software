@@ -1,23 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import TextField from 'material-ui/TextField';
 import DropDownMenu from 'material-ui/DropDownMenu';
-import AddItem from './CRUD/AddItem';
-import { rows, headerRows, menuItems, filters } from './rows';
 import { Table, TableBody, TableHeader, TableRow } from 'material-ui/Table';
-
-const propTypes = {
-  data: PropTypes.object,
-  activeContent: PropTypes.object
-};
+import { rows, headerRows, menuItems, filters } from './rows';
+import AddItem from './CRUD/AddItem';
 
 export default class DataTable extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      filtering: null,
-      searchBy: 0
-    };
+  static propTypes = {
+    activeContent: PropTypes.object,
+    data: PropTypes.object,
+  }
+
+  static defaultProps = {
+    data: {},
+    activeContent: {},
+  }
+
+  state = {
+    filtering: null,
+    searchBy: 0,
   }
 
   handleDataTable = (event, index, value) => {
@@ -29,18 +32,32 @@ export default class DataTable extends Component {
   }
 
   render() {
+    const { activeContent, data } = this.props;
+    const { searchBy, filtering } = this.state;
+
     return (
       <div>
-        <DropDownMenu className='dropdown-s' value={this.state.searchBy} onChange={this.handleDropDown}>
-          {menuItems(this.props.activeContent)}
+        <DropDownMenu
+          className="dropdown-s"
+          value={searchBy}
+          onChange={this.handleDropDown}
+        >
+          {menuItems(activeContent)}
         </DropDownMenu>
-        <TextField className='space-left-s' hintText='Search' onChange={this.handleDataTable}/>
-        <div className='right space-top-s'>
-          <AddItem data={this.props.data} activeContent={this.props.activeContent}/>
+        <TextField
+          className="space-left-s"
+          hintText="Search"
+          onChange={this.handleDataTable}
+        />
+        <div className="right space-top-s">
+          <AddItem
+            data={data}
+            activeContent={activeContent}
+          />
         </div>
         <Table
-          className='space-top-s'
-          height={'27em'}
+          className="space-top-s"
+          height="27em"
           fixedHeader
           fixedFooter={false}
           selectable={false}
@@ -52,7 +69,7 @@ export default class DataTable extends Component {
             enableSelectAll={false}
           >
             <TableRow>
-              {headerRows(this.props.activeContent)}
+              {headerRows(activeContent)}
             </TableRow>
           </TableHeader>
           <TableBody
@@ -61,20 +78,19 @@ export default class DataTable extends Component {
             showRowHover
             stripedRows={false}
           >
-            {filters(this.props.data[this.props.activeContent.value],
-              this.props.activeContent,
-              this.state.filtering,
-              this.state.searchBy)
-              .map((row, index) => (
-                <TableRow key={index}>
-                  {rows(index, row, this.props)}
-                </TableRow>
-              ))}
+            {filters(
+              data[activeContent.value],
+              activeContent,
+              filtering,
+              searchBy
+            ).map((row, index) => (
+              <TableRow key={index}>
+                {rows(index, row, this.props)}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </div>
     );
   }
 }
-
-DataTable.propTypes = propTypes;

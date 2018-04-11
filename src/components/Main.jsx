@@ -1,75 +1,80 @@
-import React, { Component } from 'react';
-import './App.css';
-import AppBar from 'material-ui/AppBar';
-import { Tabs, Tab } from 'material-ui/Tabs';
-import ActiveContent from './ActiveContent';
-import DataCharts from './DataCharts';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getProducts  } from '../redux/actions/productActions';
-import { getCategories  } from '../redux/actions/categoryActions';
-import { getCurrencies  } from '../redux/actions/currencyActions';
-import { getSuppliers  } from '../redux/actions/supplierActions';
 
-const propTypes = {
-  products: PropTypes.array,
-  categories: PropTypes.array,
-  currencies: PropTypes.array,
-  suppliers: PropTypes.array,
-  loadProducts: PropTypes.func,
-  loadCategories: PropTypes.func,
-  loadCurrencies: PropTypes.func,
-  loadSuppliers: PropTypes.func
-};
+import { getProducts } from '../redux/actions/productActions';
+import { getCategories } from '../redux/actions/categoryActions';
+import { getCurrencies } from '../redux/actions/currencyActions';
+import { getSuppliers } from '../redux/actions/supplierActions';
 
-class Main extends Component {
-  constructor(props) {
-    super(props);
+import { Tabs, Tab } from 'material-ui/Tabs';
+import AppBar from 'material-ui/AppBar';
+import ActiveContent from './ActiveContent';
+import DataCharts from './DataCharts';
+
+import './App.scss';
+
+@connect(state => ({
+  products: state.products,
+  categories: state.categories,
+  currencies: state.currencies,
+  suppliers: state.suppliers,
+}))
+export default class Main extends Component {
+  static propTypes = {
+    categories: PropTypes.array.isRequired,
+    currencies: PropTypes.array.isRequired,
+    products: PropTypes.array.isRequired,
+    suppliers: PropTypes.array.isRequired,
   }
 
   componentDidMount() {
-    this.props.loadProducts();
-    this.props.loadCategories();
-    this.props.loadCurrencies();
-    this.props.loadSuppliers();
-    // this.props[`load${this.state.activeContent.label}`]();
+    const { dispatch } = this.props;
+
+    dispatch(getProducts());
+    dispatch(getCategories());
+    dispatch(getCurrencies());
+    dispatch(getSuppliers());
   }
 
   render() {
+    const {
+      categories,
+      currencies,
+      products,
+      suppliers,
+    } = this.props;
+
     return (
-      <div>
+      <Fragment>
         <AppBar
-          title='Friendly Suppliers'
+          title="Friendly Suppliers"
           iconStyleLeft={{ display: 'none' }}
         />
-        <Tabs className='space-top-xs'>
-          <Tab label='Inventory'>
-            <ActiveContent data={this.props}/>
+        <Tabs className="space-top-xs">
+          <Tab label="Inventory">
+            <ActiveContent data={{
+              categories,
+              currencies,
+              products,
+              suppliers,
+            }}
+            />
           </Tab>
-          <Tab label='Charts'>
-            <DataCharts data={this.props}/>
+          <Tab label="Charts">
+            <DataCharts data={{
+              categories,
+              currencies,
+              products,
+              suppliers,
+            }}
+            />
           </Tab>
-          <Tab label='Orders'>
+          <Tab label="Orders">
+            <div>Orders</div>
           </Tab>
         </Tabs>
-      </div>
+      </Fragment>
     );
   }
 }
-
-Main.propTypes = propTypes;
-
-export default connect(
-  state => ({
-    products: state.products,
-    categories: state.categories,
-    currencies: state.currencies,
-    suppliers: state.suppliers
-  }),
-  dispatch => ({
-    loadProducts: () => dispatch(getProducts()),
-    loadCategories: () => dispatch(getCategories()),
-    loadCurrencies: () => dispatch(getCurrencies()),
-    loadSuppliers: () => dispatch(getSuppliers())
-  })
-)(Main);

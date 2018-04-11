@@ -1,29 +1,15 @@
-const BaseController = require('./baseController');
-const Supplier = require('../models/supplier');
-const Product = require('../models/product');
+/* eslint-disable no-underscore-dangle */
+import BaseController from './baseController';
+import Supplier from '../models/supplier';
+import Product from '../models/product';
 
-class SupplierController extends BaseController {
-  static getSuppliers(req, res) {
-    Supplier.find({})
-      .populate({
-        path: 'products',
-        model: Product,
-        populate: {
-          path: 'category currency'
-        }
-      })
-      .exec((err, suppliers) => {
-        if (err) throw err;
-        res.send(suppliers);
-      });
-  }
-
+export default class SupplierController extends BaseController {
   static addSupplier(req, res) {
     const newSupplier = new Supplier({
       name: req.body.supplier.name,
       address: req.body.supplier.address,
       telephone: req.body.supplier.telephone,
-      products: req.body.supplier.products
+      products: req.body.supplier.products,
     });
 
     newSupplier.save((err, supplier) => {
@@ -32,29 +18,32 @@ class SupplierController extends BaseController {
         console.log('Save failed!');
         return res.status(400).send({
           success: false,
-          message: 'failed'
+          message: 'failed',
         });
       }
 
       if (newSupplier.products.length) {
-        newSupplier.products.forEach(item => {
-          Product.findByIdAndUpdate(item,
-            { '$push': { 'suppliers': newSupplier._id } },
-            (err, product) => {
-              if (err) {
+        newSupplier.products.forEach((item) => {
+          Product.findByIdAndUpdate(
+            item,
+            { $push: { suppliers: newSupplier._id } },
+            (error, product) => {
+              if (error) {
                 console.log('Save failed!');
                 return res.status(400).send({
                   success: false,
-                  message: 'failed'
+                  message: 'failed',
                 });
               }
+              return res;
             }
           );
         });
       }
 
-      console.log('Save succesfully!');
+      console.log('Save successfully!');
       this.getSuppliers(req, res);
+      return res;
     });
   }
 
@@ -64,7 +53,7 @@ class SupplierController extends BaseController {
       name: req.body.supplier.name,
       address: req.body.supplier.address,
       telephone: req.body.supplier.telephone,
-      products: req.body.supplier.products
+      products: req.body.supplier.products,
     });
 
     // Supplier.findById(editingSupplier._id)
@@ -90,50 +79,55 @@ class SupplierController extends BaseController {
         console.log('Edit failed!');
         return res.status(400).send({
           success: false,
-          message: 'failed'
+          message: 'failed',
         });
       }
       // console.log(supplier.products);
-      supplier.products.forEach(item => {
-        Product.findByIdAndUpdate(item,
-          { '$pull': { 'suppliers': supplier._id } },
-          (err, product) => {
-            if (err) {
+      supplier.products.forEach((item) => {
+        Product.findByIdAndUpdate(
+          item,
+          { $pull: { suppliers: supplier._id } },
+          (error, product) => {
+            if (error) {
               console.log('Edit failed!');
               return res.status(400).send({
                 success: false,
-                message: 'failed'
+                message: 'failed',
               });
             }
+            return res;
           }
         );
       });
 
       if (editingSupplier.products.length) {
-        editingSupplier.products.forEach(item => {
-          Product.findByIdAndUpdate(item,
-            { '$push': { 'suppliers': editingSupplier._id } },
-            (err, product) => {
-              if (err) {
+        editingSupplier.products.forEach((item) => {
+          Product.findByIdAndUpdate(
+            item,
+            { $push: { suppliers: editingSupplier._id } },
+            (error, product) => {
+              if (error) {
                 console.log('Edit failed!');
                 return res.status(400).send({
                   success: false,
-                  message: 'failed'
+                  message: 'failed',
                 });
               }
+              return res;
             }
           );
         });
       }
 
-      console.log('Edit succesfully!');
+      console.log('Edit successfully!');
       this.getSuppliers(req, res);
+      return res;
     });
   }
 
   static deleteSupplier(req, res) {
     const deletingSupplier = {
-      _id: req.body.supplier._id
+      _id: req.body.supplier._id,
     };
 
     Supplier.findByIdAndRemove(deletingSupplier._id, (err, supplier) => {
@@ -141,29 +135,45 @@ class SupplierController extends BaseController {
         console.log('Delete failed!');
         return res.status(400).send({
           success: false,
-          message: 'failed'
+          message: 'failed',
         });
       }
 
-      supplier.products.forEach(item => {
-        Product.findByIdAndUpdate(item,
-          { '$pull': { 'suppliers': supplier._id } },
-          (err, product) => {
-            if (err) {
+      supplier.products.forEach((item) => {
+        Product.findByIdAndUpdate(
+          item,
+          { $pull: { suppliers: supplier._id } },
+          (error, product) => {
+            if (error) {
               console.log('Delete failed!');
               return res.status(400).send({
                 success: false,
-                message: 'failed'
+                message: 'failed',
               });
             }
+            return res;
           }
         );
       });
 
-      console.log('Delete succesfully!');
+      console.log('Delete successfully!');
       this.getSuppliers(req, res);
+      return res;
     });
   }
-}
 
-module.exports = SupplierController;
+  static getSuppliers(req, res) {
+    Supplier.find({})
+      .populate({
+        path: 'products',
+        model: Product,
+        populate: {
+          path: 'category currency',
+        },
+      })
+      .exec((err, suppliers) => {
+        if (err) throw err;
+        res.send(suppliers);
+      });
+  }
+}

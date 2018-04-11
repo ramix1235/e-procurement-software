@@ -3,5 +3,21 @@
     "es2015",
     "react",
     "stage-0"
+  ],
+  "plugins": [
+    "transform-decorators-legacy",
+    [
+      "module-resolver",
+      {
+        "cwd": "packagejson",
+        "root": [
+          "../"
+        ],
+        "alias": {
+          "@root": "../",
+          "@components": "../src/components"
+        }
+      }
+    ]
   ]
 }

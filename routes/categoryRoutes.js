@@ -1,6 +1,6 @@
-const categoryController = require('../controllers/categoryController');
+import categoryController from '../controllers/categoryController';
 
-module.exports = (app) => {
+export default (app) => {
   app.get('/api/category/getCategories', (req, res) => {
     categoryController.getCategories(req, res);
   });

@@ -1,19 +1,25 @@
 import React, { Component } from 'react';
-import DataTable from './DataTable';
 import PropTypes from 'prop-types';
-import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
-import Paper from 'material-ui/Paper';
 
-const propTypes = {
-  data : PropTypes.object
-};
+import Paper from 'material-ui/Paper';
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
+import DataTable from './DataTable';
 
 export default class ActiveContent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeContent: { value: 'products', label: 'Products', single: 'product' }
-    };
+  static propTypes = {
+    data: PropTypes.object,
+  };
+
+  static defaultProps = {
+    data: {},
+  }
+
+  state = {
+    activeContent: {
+      value: 'products',
+      label: 'Products',
+      single: 'product',
+    },
   }
 
   handleActiveContent = (event, index, value) => {
@@ -22,55 +28,66 @@ export default class ActiveContent extends Component {
     switch (index) {
       case 'products':
         singleVal = 'product';
-        this.props.data.loadProducts();
         break;
       case 'categories':
         singleVal = 'category';
-        this.props.data.loadCategories();
         break;
       case 'currencies':
         singleVal = 'currency';
-        this.props.data.loadCurrencies();
         break;
       case 'suppliers':
         singleVal = 'supplier';
-        this.props.data.loadSuppliers();
         break;
       default: break;
     }
-    this.setState({ activeContent: { value: index, label: index[0].toUpperCase() + index.slice(1), single: singleVal } });
+    this.setState({
+      activeContent: {
+        value: index,
+        label: index[0].toUpperCase() + index.slice(1),
+        single: singleVal,
+      },
+    });
   }
 
   render() {
+    const { data } = this.props;
+    const { activeContent } = this.state;
+
     return (
       <div>
         <Paper zDepth={1}>
-          <RadioButtonGroup name='contents' defaultSelected='products' className='radio-group space-top-s-pd space-left-xs2' onChange={this.handleActiveContent}>
+          <RadioButtonGroup
+            name="contents"
+            defaultSelected="products"
+            className="radio-group space-top-s-pd space-left-xs2"
+            onChange={this.handleActiveContent}
+          >
             <RadioButton
-              value='products'
-              label='Products'
+              value="products"
+              label="Products"
             />
             <RadioButton
-              value='categories'
-              label='Categories'
-              className='radio-btn'
+              value="categories"
+              label="Categories"
+              className="radio-btn"
             />
             <RadioButton
-              value='currencies'
-              label='Currencies'
-              className='radio-btn'
+              value="currencies"
+              label="Currencies"
+              className="radio-btn"
             />
             <RadioButton
-              value='suppliers'
-              label='Suppliers'
-              className='radio-btn'
+              value="suppliers"
+              label="Suppliers"
+              className="radio-btn"
             />
           </RadioButtonGroup>
-          <DataTable data={this.props.data} activeContent={this.state.activeContent} />
+          <DataTable
+            data={data}
+            activeContent={activeContent}
+          />
         </Paper>
       </div>
     );
   }
 }
-
-ActiveContent.propTypes = propTypes;

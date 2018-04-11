@@ -8,5 +8,5 @@ export default combineReducers({
   products,
   categories,
   currencies,
-  suppliers
+  suppliers,
 });

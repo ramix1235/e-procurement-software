@@ -1,6 +1,6 @@
-const currencyController = require('../controllers/currencyController');
+import currencyController from '../controllers/currencyController';
 
-module.exports = (app) => {
+export default (app) => {
   app.get('/api/currency/getCurrencies', (req, res) => {
     currencyController.getCurrencies(req, res);
   });

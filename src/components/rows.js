@@ -1,17 +1,21 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable function-paren-newline */
+/* eslint-disable react/no-string-refs */
 import React from 'react';
+
 import { TableRowColumn, TableHeaderColumn } from 'material-ui/Table';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import DropDownMenu from 'material-ui/DropDownMenu';
-import DeleteItem from './CRUD/DeleteItem';
-import EditItem from './CRUD/EditItem';
 import Drawer from 'material-ui/Drawer';
 import Checkbox from 'material-ui/Checkbox';
 import Subheader from 'material-ui/Subheader';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
+import EditItem from './CRUD/EditItem';
+import DeleteItem from './CRUD/DeleteItem';
 
-exports.rows = (index, row, data) => {
+export const rows = (index, row, data) => {
   const res = [];
 
   switch (data.activeContent.value) {
@@ -22,28 +26,30 @@ exports.rows = (index, row, data) => {
       res.push(<TableRowColumn key={3}>{row.category.name}</TableRowColumn>);
       res.push(<TableRowColumn key={4}>{row.price}</TableRowColumn>);
       res.push(<TableRowColumn key={5}>{row.currency.name}</TableRowColumn>);
-      res.push(<TableRowColumn key={6}>
-        <EditItem data = {data} currentItem={row} activeContent={data.activeContent} />
-        <DeleteItem data = {row} activeContent={data.activeContent}/>
-      </TableRowColumn>
-      );
+      res.push(
+        <TableRowColumn key={6}>
+          <EditItem data={data} currentItem={row} activeContent={data.activeContent} />
+          <DeleteItem data={row} activeContent={data.activeContent} />
+        </TableRowColumn>);
       break;
     case 'categories':
       res.push(<TableRowColumn key={0}>{index}</TableRowColumn>);
       res.push(<TableRowColumn key={1}>{row.name}</TableRowColumn>);
-      res.push(<TableRowColumn key={2}>
-        <EditItem data = {data} currentItem={row} activeContent={data.activeContent}/>
-        <DeleteItem data = {row} activeContent={data.activeContent} />
-      </TableRowColumn>
+      res.push(
+        <TableRowColumn key={2}>
+          <EditItem data={data} currentItem={row} activeContent={data.activeContent} />
+          <DeleteItem data={row} activeContent={data.activeContent} />
+        </TableRowColumn>
       );
       break;
     case 'currencies':
       res.push(<TableRowColumn key={0}>{index}</TableRowColumn>);
       res.push(<TableRowColumn key={1}>{row.name}</TableRowColumn>);
-      res.push(<TableRowColumn key={2}>
-        <EditItem data = {data} currentItem={row} activeContent={data.activeContent} />
-        <DeleteItem data = {row} activeContent={data.activeContent}/>
-      </TableRowColumn>
+      res.push(
+        <TableRowColumn key={2}>
+          <EditItem data={data} currentItem={row} activeContent={data.activeContent} />
+          <DeleteItem data={row} activeContent={data.activeContent} />
+        </TableRowColumn>
       );
       break;
     case 'suppliers':
@@ -51,10 +57,11 @@ exports.rows = (index, row, data) => {
       res.push(<TableRowColumn key={1}>{row.name}</TableRowColumn>);
       res.push(<TableRowColumn key={2}>{row.address}</TableRowColumn>);
       res.push(<TableRowColumn key={3}>{row.telephone}</TableRowColumn>);
-      res.push(<TableRowColumn key={4}>
-        <EditItem data = {data} currentItem={row} activeContent={data.activeContent}/>
-        <DeleteItem data = {row} activeContent={data.activeContent}/>
-      </TableRowColumn>
+      res.push(
+        <TableRowColumn key={4}>
+          <EditItem data={data} currentItem={row} activeContent={data.activeContent} />
+          <DeleteItem data={row} activeContent={data.activeContent} />
+        </TableRowColumn>
       );
       break;
     default: break;
@@ -62,74 +69,74 @@ exports.rows = (index, row, data) => {
   return res;
 };
 
-exports.headerRows = (activeContent) => {
+export const headerRows = (activeContent) => {
   const res = [];
 
   switch (activeContent.value) {
     case 'products':
-      res.push(<TableHeaderColumn key={0} tooltip='The ID'>ID</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={1} tooltip='The Name'>Name</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={2} tooltip='The Vendor Code'>Vendor Code</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={3} tooltip='The Category'>Category</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={4} tooltip='The Price'>Price</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={5} tooltip='The Currency'>Currency</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={6} tooltip='The Actions'>Actions</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={0} tooltip="The ID">ID</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={1} tooltip="The Name">Name</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={2} tooltip="The Vendor Code">Vendor Code</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={3} tooltip="The Category">Category</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={4} tooltip="The Price">Price</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={5} tooltip="The Currency">Currency</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={6} tooltip="The Actions">Actions</TableHeaderColumn>);
       break;
     case 'categories':
-      res.push(<TableHeaderColumn key={0} tooltip='The ID'>ID</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={1} tooltip='The Name'>Name</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={2} tooltip='The Actions'>Actions</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={0} tooltip="The ID">ID</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={1} tooltip="The Name">Name</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={2} tooltip="The Actions">Actions</TableHeaderColumn>);
       break;
     case 'currencies':
-      res.push(<TableHeaderColumn key={0} tooltip='The ID'>ID</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={1} tooltip='The Name'>Name</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={2} tooltip='The Actions'>Actions</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={0} tooltip="The ID">ID</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={1} tooltip="The Name">Name</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={2} tooltip="The Actions">Actions</TableHeaderColumn>);
       break;
     case 'suppliers':
-      res.push(<TableHeaderColumn key={0} tooltip='The ID'>ID</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={1} tooltip='The Name'>Name</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={1} tooltip='The Address'>Address</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={1} tooltip='The Telephone'>Telephone</TableHeaderColumn>);
-      res.push(<TableHeaderColumn key={2} tooltip='The Actions'>Actions</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={0} tooltip="The ID">ID</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={1} tooltip="The Name">Name</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={1} tooltip="The Address">Address</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={1} tooltip="The Telephone">Telephone</TableHeaderColumn>);
+      res.push(<TableHeaderColumn key={2} tooltip="The Actions">Actions</TableHeaderColumn>);
       break;
     default: break;
   }
   return res;
 };
 
-exports.menuItems = (activeContent) => {
+export const menuItems = (activeContent) => {
   const res = [];
 
   switch (activeContent.value) {
     case 'products':
-      res.push(<MenuItem value={0} key={0} primaryText={'Name'} />);
-      res.push(<MenuItem value={1} key={1} primaryText={'Vendor Code'} />);
-      res.push(<MenuItem value={2} key={2} primaryText={'Category'} />);
-      res.push(<MenuItem value={3} key={3} primaryText={'Price'} />);
-      res.push(<MenuItem value={4} key={4} primaryText={'Currency'} />);
+      res.push(<MenuItem key={0} value={0} primaryText="Name" />);
+      res.push(<MenuItem key={1} value={1} primaryText="Vendor Code" />);
+      res.push(<MenuItem key={2} value={2} primaryText="Category" />);
+      res.push(<MenuItem key={3} value={3} primaryText="Price" />);
+      res.push(<MenuItem key={4} value={4} primaryText="Currency" />);
       break;
     case 'categories':
-      res.push(<MenuItem value={0} key={0} primaryText={'Name'} />);
+      res.push(<MenuItem key={0} value={0} primaryText="Name" />);
       break;
     case 'currencies':
-      res.push(<MenuItem value={0} key={0} primaryText={'Name'} />);
+      res.push(<MenuItem key={0} value={0} primaryText="Name" />);
       break;
     case 'suppliers':
-      res.push(<MenuItem value={0} key={0} primaryText={'Name'} />);
-      res.push(<MenuItem value={1} key={1} primaryText={'Address'} />);
-      res.push(<MenuItem value={2} key={2} primaryText={'Telephone'} />);
+      res.push(<MenuItem key={0} value={0} primaryText="Name" />);
+      res.push(<MenuItem key={1} value={1} primaryText="Address" />);
+      res.push(<MenuItem key={2} value={2} primaryText="Telephone" />);
       break;
     default: break;
   }
   return res;
 };
 
-exports.filters = (arr, activeContent, filtering, searchBy) => {
+export const filters = (arr, activeContent, filtering, searchBy) => {
   if (!filtering) return arr;
 
   switch (activeContent.value) {
     case 'products':
-      return arr.filter(product => {
+      return arr.filter((product) => {
         let res = true;
 
         switch (searchBy) {
@@ -143,7 +150,7 @@ exports.filters = (arr, activeContent, filtering, searchBy) => {
         return res;
       });
     case 'categories':
-      return arr.filter(category => {
+      return arr.filter((category) => {
         let res = true;
 
         switch (searchBy) {
@@ -153,7 +160,7 @@ exports.filters = (arr, activeContent, filtering, searchBy) => {
         return res;
       });
     case 'currencies':
-      return arr.filter(currency => {
+      return arr.filter((currency) => {
         let res = true;
 
         switch (searchBy) {
@@ -163,7 +170,7 @@ exports.filters = (arr, activeContent, filtering, searchBy) => {
         return res;
       });
     case 'suppliers':
-      return arr.filter(supplier => {
+      return arr.filter((supplier) => {
         let res = true;
 
         switch (searchBy) {
@@ -176,9 +183,10 @@ exports.filters = (arr, activeContent, filtering, searchBy) => {
       });
     default: break;
   }
+  return arr;
 };
 
-exports.addFields = (data, itemData, handle, current) => {
+export const addFields = (data, itemData, handle, current) => {
   const { handleDropDownCategories, handleDropDownCurrencies } = handle;
 
   switch (data.activeContent.value) {
@@ -190,19 +198,19 @@ exports.addFields = (data, itemData, handle, current) => {
   }
 
   function getProductsField() {
-    const categories = data.data.categories.map((item, i) => {
-      return <MenuItem value={item._id} key={i} primaryText={item.name} />;
-    });
-    const currencies = data.data.currencies.map((item, i) => {
-      return <MenuItem value={item._id} key={i} primaryText={item.name} />;
-    });
+    const categories = data.data.categories.map((item, i) => (
+      <MenuItem key={i} value={item._id} primaryText={item.name} />
+    ));
+    const currencies = data.data.currencies.map((item, i) => (
+      <MenuItem key={i} value={item._id} primaryText={item.name} />
+    ));
 
     const suppliers = data.data.suppliers.map((item, i) => {
       let isChecked = false;
 
       if (current) {
         // console.log(current.suppliers);
-        current.suppliers.forEach(currItem => {
+        current.suppliers.forEach((currItem) => {
           if (item._id === currItem._id) {
             isChecked = true;
           }
@@ -213,7 +221,7 @@ exports.addFields = (data, itemData, handle, current) => {
         <div key={i}>
           <Divider />
           <ListItem
-            leftCheckbox={<Checkbox ref={`supplierField${i}`} defaultChecked={isChecked}/>}
+            leftCheckbox={<Checkbox ref={`supplierField${i}`} defaultChecked={isChecked} />}
             primaryText={item.name}
             secondaryText={item.telephone}
           />
@@ -224,18 +232,19 @@ exports.addFields = (data, itemData, handle, current) => {
     return (
       <div>
         <TextField
+          ref="nameField"
+          // ref={(ref) => { this.nameField = ref; }}
           // errorText='This field is required'
-          floatingLabelText='Name'
-          className='space-left-s'
-          ref='nameField'
+          floatingLabelText="Name"
+          className="space-left-s"
           defaultValue={current ? current.name : ''}
         />
         <br />
         <TextField
+          ref="vendorCodeField"
           // errorText='This field is required'
-          floatingLabelText='Vendor Code'
-          className='space-left-s'
-          ref='vendorCodeField'
+          floatingLabelText="Vendor Code"
+          className="space-left-s"
           defaultValue={current ? current.vendorCode : ''}
         />
         <br /><br />
@@ -244,14 +253,14 @@ exports.addFields = (data, itemData, handle, current) => {
         </DropDownMenu>
         <br />
         <TextField
+          ref="priceField"
           // errorText='This field is required'
-          floatingLabelText='Price'
-          className='space-left-s'
-          type='number'
-          ref='priceField'
+          floatingLabelText="Price"
+          className="space-left-s"
+          type="number"
           defaultValue={current ? current.price : ''}
         />
-        <DropDownMenu className='dropdown-xs' value={itemData.currencyBy} onChange={handleDropDownCurrencies}>
+        <DropDownMenu className="dropdown-xs" value={itemData.currencyBy} onChange={handleDropDownCurrencies}>
           {currencies}
         </DropDownMenu>
         <br />
@@ -269,10 +278,10 @@ exports.addFields = (data, itemData, handle, current) => {
     return (
       <div>
         <TextField
+          ref="nameField"
           // errorText='This field is required'
-          floatingLabelText='Name'
-          className='space-left-s'
-          ref='nameField'
+          floatingLabelText="Name"
+          className="space-left-s"
           defaultValue={current ? current.name : ''}
         />
       </div>
@@ -283,10 +292,10 @@ exports.addFields = (data, itemData, handle, current) => {
     return (
       <div>
         <TextField
+          ref="nameField"
           // errorText='This field is required'
-          floatingLabelText='Name'
-          className='space-left-s'
-          ref='nameField'
+          floatingLabelText="Name"
+          className="space-left-s"
           defaultValue={current ? current.name : ''}
         />
       </div>
@@ -298,7 +307,7 @@ exports.addFields = (data, itemData, handle, current) => {
       let isChecked = false;
 
       if (current) {
-        current.products.forEach(currItem => {
+        current.products.forEach((currItem) => {
           if (item._id === currItem._id) {
             isChecked = true;
           }
@@ -309,7 +318,7 @@ exports.addFields = (data, itemData, handle, current) => {
         <div key={i}>
           <Divider />
           <ListItem
-            leftCheckbox={<Checkbox ref={`productField${i}`} defaultChecked={isChecked}/>}
+            leftCheckbox={<Checkbox ref={`productField${i}`} defaultChecked={isChecked} />}
             primaryText={item.name}
             secondaryText={item.vendorCode}
           />
@@ -320,26 +329,26 @@ exports.addFields = (data, itemData, handle, current) => {
     return (
       <div>
         <TextField
+          ref="nameField"
           // errorText='This field is required'
-          floatingLabelText='Name'
-          className='space-left-s'
-          ref='nameField'
+          floatingLabelText="Name"
+          className="space-left-s"
           defaultValue={current ? current.name : ''}
         />
         <br />
         <TextField
+          ref="addressField"
           // errorText='This field is required'
-          floatingLabelText='Address'
-          className='space-left-s'
-          ref='addressField'
+          floatingLabelText="Address"
+          className="space-left-s"
           defaultValue={current ? current.address : ''}
         />
         <br />
         <TextField
+          ref="telephoneField"
           // errorText='This field is required'
-          floatingLabelText='Telephone'
-          className='space-left-s'
-          ref='telephoneField'
+          floatingLabelText="Telephone"
+          className="space-left-s"
           defaultValue={current ? current.telephone : ''}
         />
         <br />
@@ -352,9 +361,10 @@ exports.addFields = (data, itemData, handle, current) => {
       </div>
     );
   }
+  return <div />;
 };
 
-exports.addItems = (context) => {
+export const addItems = (context) => {
   switch (context.props.activeContent.value) {
     case 'products': addProduct(); break;
     case 'categories': addCategory(); break;
@@ -378,12 +388,12 @@ exports.addItems = (context) => {
       category: context.state.itemData.categoryBy,
       price: +document.getElementById(context.refs.priceField.uniqueId).value,
       currency: context.state.itemData.currencyBy,
-      suppliers: checkedSuppliers
+      suppliers: checkedSuppliers,
     };
 
-    context.props.addProduct(newProduct)
+    context.props.dispatch(context.props.addProduct(newProduct))
       .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
-      .catch(err => {
+      .catch((err) => {
         // console.log(err.response.data.message);
         if (err) context.setState({ feedbackMsg: 'Failed!' });
       });
@@ -391,12 +401,12 @@ exports.addItems = (context) => {
 
   function addCategory() {
     const newCategory = {
-      name: document.getElementById(context.refs.nameField.uniqueId).value
+      name: document.getElementById(context.refs.nameField.uniqueId).value,
     };
 
-    context.props.addCategory(newCategory)
+    context.props.dispatch(context.props.addCategory(newCategory))
       .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
-      .catch(err => {
+      .catch((err) => {
         // console.log(err.response.data.message);
         if (err) context.setState({ feedbackMsg: 'Failed!' });
       });
@@ -404,12 +414,12 @@ exports.addItems = (context) => {
 
   function addCurrency() {
     const newCurrency = {
-      name: document.getElementById(context.refs.nameField.uniqueId).value
+      name: document.getElementById(context.refs.nameField.uniqueId).value,
     };
 
-    context.props.addCurrency(newCurrency)
+    context.props.dispatch(context.props.addCurrency(newCurrency))
       .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
-      .catch(err => {
+      .catch((err) => {
         // console.log(err.response.data.message);
         if (err) context.setState({ feedbackMsg: 'Failed!' });
       });
@@ -428,19 +438,19 @@ exports.addItems = (context) => {
       name: document.getElementById(context.refs.nameField.uniqueId).value,
       address: document.getElementById(context.refs.addressField.uniqueId).value,
       telephone: document.getElementById(context.refs.telephoneField.uniqueId).value,
-      products: checkedProducts
+      products: checkedProducts,
     };
 
-    context.props.addSupplier(newSupplier)
+    context.props.dispatch(context.props.addSupplier(newSupplier))
       .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
-      .catch(err => {
+      .catch((err) => {
         // console.log(err.response.data.message);
         if (err) context.setState({ feedbackMsg: 'Failed!' });
       });
   }
 };
 
-exports.editItems = (context) => {
+export const editItems = (context) => {
   switch (context.props.activeContent.value) {
     case 'products': editProduct(); break;
     case 'categories': editCategory(); break;
@@ -465,12 +475,12 @@ exports.editItems = (context) => {
       category: context.state.itemData.categoryBy,
       price: +document.getElementById(context.refs.priceField.uniqueId).value,
       currency: context.state.itemData.currencyBy,
-      suppliers: checkedSuppliers
+      suppliers: checkedSuppliers,
     };
 
-    context.props.editProduct(editingProduct)
+    context.props.dispatch(context.props.editProduct(editingProduct))
       .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
-      .catch(err => {
+      .catch((err) => {
         // console.log(err.response.data.message);
         if (err) context.setState({ feedbackMsg: 'Failed!' });
       });
@@ -479,12 +489,12 @@ exports.editItems = (context) => {
   function editCategory() {
     const editingCategory = {
       _id: context.props.currentItem._id,
-      name: document.getElementById(context.refs.nameField.uniqueId).value
+      name: document.getElementById(context.refs.nameField.uniqueId).value,
     };
 
-    context.props.editCategory(editingCategory)
+    context.props.dispatch(context.props.editCategory(editingCategory))
       .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
-      .catch(err => {
+      .catch((err) => {
         // console.log(err.response.data.message);
         if (err) context.setState({ feedbackMsg: 'Failed!' });
       });
@@ -493,12 +503,12 @@ exports.editItems = (context) => {
   function editCurrency() {
     const editingCurrency = {
       _id: context.props.currentItem._id,
-      name: document.getElementById(context.refs.nameField.uniqueId).value
+      name: document.getElementById(context.refs.nameField.uniqueId).value,
     };
 
-    context.props.editCurrency(editingCurrency)
+    context.props.dispatch(context.props.editCurrency(editingCurrency))
       .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
-      .catch(err => {
+      .catch((err) => {
         // console.log(err.response.data.message);
         if (err) context.setState({ feedbackMsg: 'Failed!' });
       });
@@ -518,19 +528,19 @@ exports.editItems = (context) => {
       name: document.getElementById(context.refs.nameField.uniqueId).value,
       address: document.getElementById(context.refs.addressField.uniqueId).value,
       telephone: document.getElementById(context.refs.telephoneField.uniqueId).value,
-      products: checkedProducts
+      products: checkedProducts,
     };
 
-    context.props.editSupplier(editingSupplier)
+    context.props.dispatch(context.props.editSupplier(editingSupplier))
       .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
-      .catch(err => {
+      .catch((err) => {
         // console.log(err.response.data.message);
         if (err) context.setState({ feedbackMsg: 'Failed!' });
       });
   }
 };
 
-exports.deleteItems = (context) => {
+export const deleteItems = (context) => {
   switch (context.props.activeContent.value) {
     case 'products': deleteProduct(); break;
     case 'categories': deleteCategory(); break;
@@ -541,12 +551,12 @@ exports.deleteItems = (context) => {
 
   function deleteProduct() {
     const deletingProduct = {
-      _id: context.props.data._id
+      _id: context.props.data._id,
     };
 
-    context.props.deleteProduct(deletingProduct)
+    context.props.dispatch(context.props.deleteProduct(deletingProduct))
       .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
-      .catch(err => {
+      .catch((err) => {
         // console.log(err.response.data.message);
         if (err) context.setState({ feedbackMsg: 'Failed!' });
       });
@@ -554,12 +564,12 @@ exports.deleteItems = (context) => {
 
   function deleteCategory() {
     const deletingCategory = {
-      _id: context.props.data._id
+      _id: context.props.data._id,
     };
 
-    context.props.deleteCategory(deletingCategory)
+    context.props.dispatch(context.props.deleteCategory(deletingCategory))
       .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
-      .catch(err => {
+      .catch((err) => {
         // console.log(err.response.data.message);
         if (err) context.setState({ feedbackMsg: 'Failed!' });
       });
@@ -567,12 +577,12 @@ exports.deleteItems = (context) => {
 
   function deleteCurrency() {
     const deletingCurrency = {
-      _id: context.props.data._id
+      _id: context.props.data._id,
     };
 
-    context.props.deleteCurrency(deletingCurrency)
+    context.props.dispatch(context.props.deleteCurrency(deletingCurrency))
       .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
-      .catch(err => {
+      .catch((err) => {
         // console.log(err.response.data.message);
         if (err) context.setState({ feedbackMsg: 'Failed!' });
       });
@@ -580,12 +590,12 @@ exports.deleteItems = (context) => {
 
   function deleteSupplier() {
     const deletingSupplier = {
-      _id: context.props.data._id
+      _id: context.props.data._id,
     };
 
-    context.props.deleteSupplier(deletingSupplier)
+    context.props.dispatch(context.props.deleteSupplier(deletingSupplier))
       .then(context.setState({ feedback: true, feedbackMsg: 'Complete!' }))
-      .catch(err => {
+      .catch((err) => {
         // console.log(err.response.data.message);
         if (err) context.setState({ feedbackMsg: 'Failed!' });
       });

@@ -1,17 +1,34 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import FlatButton from 'material-ui/FlatButton';
 import ReactToPrint from 'react-to-print';
-import { Card, CardActions, CardTitle, CardText } from 'material-ui/Card';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Label, PieChart, Pie, Cell } from 'recharts';
 
-const propTypes = {
-  data: PropTypes.object
-};
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Label,
+  PieChart,
+  Pie,
+  Cell,
+} from 'recharts';
+import {
+  Card,
+  CardActions,
+  CardTitle,
+  CardText,
+} from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
 
 export default class DataCharts extends Component {
-  constructor(props) {
-    super(props);
+  static propTypes = {
+    data: PropTypes.object,
+  };
+
+  static defaultProps = {
+    data: {},
   }
 
   render() {
@@ -19,24 +36,22 @@ export default class DataCharts extends Component {
     const numberOfProductsFromSuppliers = [];
     const productCategories = [];
 
-    this.props.data.suppliers.forEach(supplier => {
+    this.props.data.suppliers.forEach((supplier) => {
       numberOfProductsFromSuppliers.push({
         name: supplier.name,
-        amount: supplier.products.length
+        amount: supplier.products.length,
       });
     });
-    this.props.data.categories.forEach(category => {
+    this.props.data.categories.forEach((category) => {
       productCategories.push({
         name: category.name,
-        amount: 0
+        amount: 0,
       });
     });
-    this.props.data.products.forEach(product => {
-      productCategories.forEach(item => {
+    this.props.data.products.forEach((product) => {
+      productCategories.forEach((item) => {
         if (item.name === product.category.name) {
-          /* eslint-disable */
-          item.amount++;
-          /* eslint-enable*/
+          item.amount++; // eslint-disable-line
         }
       });
     });
@@ -44,41 +59,57 @@ export default class DataCharts extends Component {
     return (
       <div>
         <Card>
-          <CardTitle title='Number of products from suppliers' />
+          <CardTitle title="Number of products from suppliers" />
           <CardText>
-            <BarChart width={400} height={300} data={numberOfProductsFromSuppliers} ref={el => (this.barChart = el)}>
-              <XAxis dataKey='name'>
-                <Label value='Suppliers' position='insideBottom' />
+            <BarChart
+              ref={(ref) => { this.barChart = ref; }}
+              width={400}
+              height={300}
+              data={numberOfProductsFromSuppliers}
+            >
+              <XAxis dataKey="name">
+                <Label value="Suppliers" position="insideBottom" />
               </XAxis>
               <YAxis>
-                <Label value='Amount' angle={-90} position='insideLeft' />
+                <Label value="Amount" angle={-90} position="insideLeft" />
               </YAxis>
-              <CartesianGrid strokeDasharray='3 3'/>
-              <Tooltip/>
-              <Bar dataKey='amount' fill='#8884d8' />
+              <CartesianGrid strokeDasharray="3 3" />
+              <Tooltip />
+              <Bar dataKey="amount" fill="#8884d8" />
             </BarChart>
           </CardText>
           <CardActions>
-            <ReactToPrint trigger={() => <FlatButton label='Print' />} content={() => this.barChart}/>
+            <ReactToPrint trigger={() => <FlatButton label="Print" />} content={() => this.barChart} />
           </CardActions>
         </Card>
-        <Card className='space-top-xs2'>
-          <CardTitle title='Product categories' />
+        <Card className="space-top-xs2">
+          <CardTitle title="Product categories" />
           <CardText>
-            <PieChart width={400} height={300} ref={el => (this.pieChart = el)}>
-              <Pie dataKey='amount' data={productCategories} cx={200} cy={130} innerRadius={50} outerRadius={100} fill='#8884d8' label>
-                {productCategories.map((entry, index) => <Cell key={index} fill={COLORS[index % COLORS.length]}/>)}
+            <PieChart
+              ref={(ref) => { this.pieChart = ref; }}
+              width={400}
+              height={300}
+            >
+              <Pie
+                dataKey="amount"
+                data={productCategories}
+                cx={200}
+                cy={130}
+                innerRadius={50}
+                outerRadius={100}
+                fill="#8884d8"
+                label
+              >
+                {productCategories.map((entry, index) => <Cell key={index} fill={COLORS[index % COLORS.length]} />)}
               </Pie>
-              <Tooltip/>
+              <Tooltip />
             </PieChart>
           </CardText>
           <CardActions>
-            <ReactToPrint trigger={() => <FlatButton label='Print' />} content={() => this.pieChart}/>
+            <ReactToPrint trigger={() => <FlatButton label="Print" />} content={() => this.pieChart} />
           </CardActions>
         </Card>
       </div>
     );
   }
 }
-
-DataCharts.propTypes = propTypes;

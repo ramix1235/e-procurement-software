@@ -1,41 +1,56 @@
+/* eslint-disable no-unused-vars */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+import { addProduct } from '../../redux/actions/productActions';
+import { addCategory } from '../../redux/actions/categoryActions';
+import { addCurrency } from '../../redux/actions/currencyActions';
+import { addSupplier } from '../../redux/actions/supplierActions';
+
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
-import { connect } from 'react-redux';
-import { addProduct  } from '../../redux/actions/productActions';
-import { addCategory  } from '../../redux/actions/categoryActions';
-import { addCurrency  } from '../../redux/actions/currencyActions';
-import { addSupplier  } from '../../redux/actions/supplierActions';
 import { addFields, addItems } from '../rows';
 
-const propTypes = {
-  data: PropTypes.object,
-  activeContent: PropTypes.object,
-  products: PropTypes.array,
-  categories: PropTypes.array,
-  currencies: PropTypes.array,
-  suppliers: PropTypes.array,
-  addProduct: PropTypes.func,
-  addCategory: PropTypes.func,
-  addCurrency: PropTypes.func,
-  addSupplier: PropTypes.func
-};
+@connect(state => ({
+  products: state.products,
+  categories: state.categories,
+  currencies: state.currencies,
+  suppliers: state.suppliers,
+}))
+export default class AddItem extends Component {
+  static propTypes = {
+    categories: PropTypes.array.isRequired,
+    currencies: PropTypes.array.isRequired,
+    products: PropTypes.array.isRequired,
+    suppliers: PropTypes.array.isRequired,
+    activeContent: PropTypes.object,
+    addCategory: PropTypes.func,
+    addCurrency: PropTypes.func,
+    addProduct: PropTypes.func,
+    addSupplier: PropTypes.func,
+    data: PropTypes.object,
+  }
 
-class AddItem extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      open: false,
-      itemData: {
-        categoryBy: null,
-        currencyBy: null
-      },
-      feedback: false,
-      feedbackMsg: 'Complete!'
-    };
+  static defaultProps = {
+    data: {},
+    activeContent: {},
+    addProduct,
+    addCategory,
+    addCurrency,
+    addSupplier,
+  }
+
+  state = {
+    open: false,
+    itemData: {
+      categoryBy: null,
+      currencyBy: null,
+    },
+    feedback: false,
+    feedbackMsg: 'Complete!',
   }
 
   handleOpen = () => {
@@ -56,53 +71,67 @@ class AddItem extends Component {
   }
 
   handleDropDownCategories = (event, index, value) => {
-    this.setState({ itemData: { categoryBy: value, currencyBy: this.state.itemData.currencyBy } });
+    const { itemData: { currencyBy } } = this.state;
+
+    this.setState({ itemData: { categoryBy: value, currencyBy } });
   };
 
   handleDropDownCurrencies = (event, index, value) => {
-    this.setState({ itemData: { categoryBy: this.state.itemData.categoryBy, currencyBy: value } });
+    const { itemData: { categoryBy } } = this.state;
+
+    this.setState({ itemData: { categoryBy, currencyBy: value } });
   };
 
   render() {
+    const {
+      open,
+      itemData,
+      feedback,
+      feedbackMsg,
+    } = this.state;
+    const {
+      activeContent,
+    } = this.props;
     const actions = [
       <FlatButton
-        label='Ok'
         key={0}
+        label="Ok"
         primary
         // disabled
         onClick={this.handleSaveData}
       />,
       <FlatButton
-        label='Discard'
         key={1}
+        label="Discard"
         primary
         onClick={this.handleClose}
-      />
+      />,
     ];
 
     return (
-      <div className='element-inline'>
-        <RaisedButton label={`Add ${this.props.activeContent.single}`} onClick={this.handleOpen} />
+      <div className="element-inline">
+        <RaisedButton label={`Add ${activeContent.single}`} onClick={this.handleOpen} />
         <Dialog
-          title={`Add ${this.props.activeContent.single}`}
+          title={`Add ${activeContent.single}`}
           actions={actions}
           modal
-          open={this.state.open}
+          open={open}
           onRequestClose={this.handleClose}
           autoScrollBodyContent
         >
-          {addFields(this.props,
-            this.state.itemData,
+          {addFields(
+            this.props,
+            itemData,
             {
               handleDropDownCategories: this.handleDropDownCategories,
-              handleDropDownCurrencies: this.handleDropDownCurrencies
+              handleDropDownCurrencies: this.handleDropDownCurrencies,
             },
             null
           )}
         </Dialog>
         <Snackbar
-          open={this.state.feedback}
-          message={this.state.feedbackMsg}
+          open={feedback}
+          message={feedbackMsg}
           autoHideDuration={4000}
           onRequestClose={this.handleRequestClose}
         />
@@ -110,20 +139,3 @@ class AddItem extends Component {
     );
   }
 }
-
-AddItem.propTypes = propTypes;
-
-export default connect(
-  state => ({
-    products: state.products,
-    categories: state.categories,
-    currencies: state.currencies,
-    suppliers: state.suppliers
-  }),
-  dispatch => ({
-    addProduct: (data) => dispatch(addProduct(data)),
-    addCategory: (data) => dispatch(addCategory(data)),
-    addCurrency: (data) => dispatch(addCurrency(data)),
-    addSupplier: (data) => dispatch(addSupplier(data))
-  })
-)(AddItem);

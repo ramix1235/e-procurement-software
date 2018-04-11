@@ -1,10 +1,11 @@
+/* eslint-disable arrow-body-style */
 import axios from 'axios';
 
 export function getProducts() {
-  return dispatch => {
+  return (dispatch) => {
     return axios
       .get('/api/product/getProducts')
-      .then(products => {
+      .then((products) => {
         dispatch({ type: 'GET_PRODUCTS_SUCCESS', payload: products.data });
         return products.data;
       });
@@ -12,48 +13,48 @@ export function getProducts() {
 }
 
 export function addProduct(newProduct) {
-  return dispatch => {
+  return (dispatch) => {
     return axios
       .post('/api/product/addProduct', {
-        product: newProduct
+        product: newProduct,
       })
-      .then(products => {
+      .then((products) => {
         dispatch({ type: 'ADD_PRODUCT_SUCCESS', payload: products.data });
         return products.data;
       })
-      .catch(err => {
+      .catch((err) => {
         if (err) throw err;
       });
   };
 }
 
 export function editProduct(editingProduct) {
-  return dispatch => {
+  return (dispatch) => {
     return axios
       .post('/api/product/editProduct', {
-        product: editingProduct
+        product: editingProduct,
       })
-      .then(products => {
+      .then((products) => {
         dispatch({ type: 'EDIT_PRODUCT_SUCCESS', payload: products.data });
         return products.data;
       })
-      .catch(err => {
+      .catch((err) => {
         if (err) throw err;
       });
   };
 }
 
 export function deleteProduct(deletingProduct) {
-  return dispatch => {
+  return (dispatch) => {
     return axios
       .post('/api/product/deleteProduct', {
-        product: deletingProduct
+        product: deletingProduct,
       })
-      .then(products => {
+      .then((products) => {
         dispatch({ type: 'DELETE_PRODUCT_SUCCESS', payload: products.data });
         return products.data;
       })
-      .catch(err => {
+      .catch((err) => {
         if (err) throw err;
       });
   };

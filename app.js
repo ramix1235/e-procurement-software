@@ -1,18 +1,26 @@
-const express = require('express');
-const engine = require('ejs-mate');
-const path = require('path');
-const bodyParser = require('body-parser');
+
+import express from 'express';
+import engine from 'ejs-mate';
+import path from 'path';
+import bodyParser from 'body-parser';
+
+import router from './routes';
+
+import assetsData from './middleware/assetsData';
+import './core/config';
+import './core/dbConnect';
+
 // const PORT = nconf.get('port');
 const PORT = process.env.PORT || 3001;
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(require('./middleware/assetsData'));
+app.use(assetsData);
 
-require('./core/config');
-require('./core/dbConnect');
-require('./routes')(app, {});
+
+// router
+router(app, {});
 
 app.use('/public/', express.static(path.resolve(__dirname, 'public')));
 app.engine('ejs', engine);

@@ -62,23 +62,53 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
+        exclude: /node_modules/,
         use: [
-          {
-            loader: 'babel-loader'
-          }
-        ]
+          "babel-loader",
+          // "eslint-loader",
+        ],
       },
       {
         test: /\.css$/,
-        use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: [ 'css-loader' ] })
+        loader: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            'css-loader',
+            {
+              loader: 'postcss-loader',
+              options: './postcss.config.js',
+            }],
+        }),
       },
       {
         test: /\.less$/,
-        use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: [ 'css-loader!less-loader' ] })
+        loader: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            'css-loader',
+            {
+              loader: 'postcss-loader',
+              options: './postcss.config.js',
+            },
+            'less-loader',
+          ],
+        }),
       },
       {
         test: /\.scss$/,
-        use: ExtractTextPlugin.extract({ fallback: 'style-loader', use: [ 'css-loader!sass-loader' ] })
+        loader: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            'css-loader',
+            {
+              loader: 'postcss-loader',
+              options: './postcss.config.js',
+            },
+            {
+              loader: 'sass-loader',
+            },
+          ],
+        }),
       },
       {
         test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,

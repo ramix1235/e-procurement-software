@@ -1,11 +1,9 @@
-class BaseController {
+export default class BaseController {
   static newError(status, message) {
     console.log(message);
     return {
       status,
-      message
+      message,
     };
   }
 }
-
-module.exports = BaseController;

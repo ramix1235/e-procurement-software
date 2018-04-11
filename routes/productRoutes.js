@@ -1,6 +1,6 @@
-const productController = require('../controllers/productController');
+import productController from '../controllers/productController';
 
-module.exports = (app) => {
+export default (app) => {
   app.get('/api/product/getProducts', (req, res) => {
     productController.getProducts(req, res);
   });

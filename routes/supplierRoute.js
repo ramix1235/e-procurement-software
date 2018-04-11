@@ -1,6 +1,6 @@
-const supplierController = require('../controllers/supplierController');
+import supplierController from '../controllers/supplierController';
 
-module.exports = (app) => {
+export default (app) => {
   app.get('/api/supplier/getSuppliers', (req, res) => {
     supplierController.getSuppliers(req, res);
   });

@@ -1,10 +1,11 @@
+/* eslint-disable arrow-body-style */
 import axios from 'axios';
 
 export function getCategories() {
-  return dispatch => {
+  return (dispatch) => {
     return axios
       .get('/api/category/getCategories')
-      .then(categories => {
+      .then((categories) => {
         dispatch({ type: 'GET_CATEGORIES_SUCCESS', payload: categories.data });
         return categories.data;
       });
@@ -12,49 +13,48 @@ export function getCategories() {
 }
 
 export function addCategory(newCategory) {
-  return dispatch => {
+  return (dispatch) => {
     return axios
       .post('/api/category/addCategory', {
-        category: newCategory
+        category: newCategory,
       })
-      .then(categories => {
+      .then((categories) => {
         dispatch({ type: 'ADD_CATEGORY_SUCCESS', payload: categories.data });
         return categories.data;
       })
-      .catch(err => {
+      .catch((err) => {
         if (err) throw err;
       });
   };
 }
 
 export function editCategory(editingCategory) {
-  return dispatch => {
+  return (dispatch) => {
     return axios
       .post('/api/category/editCategory', {
-        category: editingCategory
+        category: editingCategory,
       })
-      .then(categories => {
+      .then((categories) => {
         dispatch({ type: 'EDIT_CATEGORY_SUCCESS', payload: categories.data });
         return categories.data;
       })
-      .catch(err => {
+      .catch((err) => {
         if (err) throw err;
       });
   };
 }
 
-
 export function deleteCategory(deletingCategory) {
-  return dispatch => {
+  return (dispatch) => {
     return axios
       .post('/api/category/deleteCategory', {
-        category: deletingCategory
+        category: deletingCategory,
       })
-      .then(categories => {
+      .then((categories) => {
         dispatch({ type: 'DELETE_CATEGORY_SUCCESS', payload: categories.data });
         return categories.data;
       })
-      .catch(err => {
+      .catch((err) => {
         if (err) throw err;
       });
   };

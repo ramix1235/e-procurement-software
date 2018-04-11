@@ -1,10 +1,11 @@
+/* eslint-disable arrow-body-style */
 import axios from 'axios';
 
 export function getCurrencies() {
-  return dispatch => {
-    return axios
+  return (dispatch) => {
+    axios
       .get('/api/currency/getCurrencies')
-      .then(currencies => {
+      .then((currencies) => {
         dispatch({ type: 'GET_CURRENCIES_SUCCESS', payload: currencies.data });
         return currencies.data;
       });
@@ -12,32 +13,32 @@ export function getCurrencies() {
 }
 
 export function addCurrency(newCurrency) {
-  return dispatch => {
-    return axios
+  return (dispatch) => {
+    axios
       .post('/api/currency/addCurrency', {
-        currency: newCurrency
+        currency: newCurrency,
       })
-      .then(currencies => {
+      .then((currencies) => {
         dispatch({ type: 'ADD_CURRENCY_SUCCESS', payload: currencies.data });
         return currencies.data;
       })
-      .catch(err => {
+      .catch((err) => {
         if (err) throw err;
       });
   };
 }
 
 export function editCurrency(editingCurrency) {
-  return dispatch => {
+  return (dispatch) => {
     return axios
       .post('/api/currency/editCurrency', {
-        currency: editingCurrency
+        currency: editingCurrency,
       })
-      .then(currencies => {
+      .then((currencies) => {
         dispatch({ type: 'EDIT_CURRENCY_SUCCESS', payload: currencies.data });
         return currencies.data;
       })
-      .catch(err => {
+      .catch((err) => {
         if (err) throw err;
       });
   };
@@ -45,16 +46,16 @@ export function editCurrency(editingCurrency) {
 
 
 export function deleteCurrency(deletingCurrency) {
-  return dispatch => {
+  return (dispatch) => {
     return axios
       .post('/api/currency/deleteCurrency', {
-        currency: deletingCurrency
+        currency: deletingCurrency,
       })
-      .then(currencies => {
+      .then((currencies) => {
         dispatch({ type: 'DELETE_CURRENCY_SUCCESS', payload: currencies.data });
         return currencies.data;
       })
-      .catch(err => {
+      .catch((err) => {
         if (err) throw err;
       });
   };
