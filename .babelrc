@@ -11,11 +11,11 @@
       {
         "cwd": "packagejson",
         "root": [
-          "../"
+          "./"
         ],
         "alias": {
-          "@root": "../",
-          "@components": "../src/components"
+          "@root": "./",
+          "@components": "./src/components/"
         }
       }
     ]

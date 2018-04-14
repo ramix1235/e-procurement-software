@@ -2,17 +2,15 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { getProducts } from '../redux/actions/productActions';
-import { getCategories } from '../redux/actions/categoryActions';
-import { getCurrencies } from '../redux/actions/currencyActions';
-import { getSuppliers } from '../redux/actions/supplierActions';
+import { getProducts } from '../../redux/actions/productActions';
+import { getCategories } from '../../redux/actions/categoryActions';
+import { getCurrencies } from '../../redux/actions/currencyActions';
+import { getSuppliers } from '../../redux/actions/supplierActions';
 
 import { Tabs, Tab } from 'material-ui/Tabs';
 import AppBar from 'material-ui/AppBar';
-import ActiveContent from './ActiveContent';
-import DataCharts from './DataCharts';
-
-import './App.scss';
+import ActiveContent from '../ActiveContent';
+import DataCharts from '../DataCharts';
 
 @connect(state => ({
   products: state.products,
