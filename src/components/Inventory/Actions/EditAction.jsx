@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
-// import pluralize from 'pluralize';
+import pluralize from 'pluralize';
 
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
@@ -112,8 +112,8 @@ export default class EditAction extends Component {
       <div className="element-inline">
         <FlatButton label="Edit" onClick={this.handleOpen} />
         <Dialog
-          // title={`Edit ${pluralize(activeType, 1)}`}
-          title={`Edit ${activeType}`}
+          title={`Edit ${pluralize(activeType, 1)}`}
+          // title={`Edit ${activeType}`}
           actions={actions}
           modal
           open={open}

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-// import pluralize from 'pluralize';
+import pluralize from 'pluralize';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
@@ -108,8 +108,8 @@ export default class AddAction extends Component {
       <div className="element-inline">
         <RaisedButton label="Add" onClick={this.handleOpen} />
         <Dialog
-          // title={`Add ${pluralize(activeType, 1)}`}
-          title={`Add ${activeType}`}
+          title={`Add ${pluralize(activeType, 1)}`}
+          // title={`Add ${activeType}`}
           actions={actions}
           modal
           open={open}
