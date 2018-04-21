@@ -25,7 +25,11 @@ export default class Main extends Component {
 
   updateTabData = () => {
     const { activeTab } = this.state;
-    const tab = localStorage.getItem('activeTab');
+    let tab = localStorage.getItem('activeTab');
+
+    if (!tab) {
+      tab = TABS_TYPES.INVENTORY;
+    }
 
     if (activeTab !== tab) {
       this.setState({ activeTab: tab });

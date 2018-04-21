@@ -68,7 +68,11 @@ export default class Inventory extends Component {
   }
 
   updateTypeData = () => {
-    const type = localStorage.getItem('activeType');
+    let type = localStorage.getItem('activeType');
+
+    if (!type) {
+      type = INVENTORY_TYPES.PRODUCTS;
+    }
 
     this.setState({ activeType: type });
   }
