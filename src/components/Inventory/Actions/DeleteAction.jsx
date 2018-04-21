@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import pluralize from 'pluralize';
+// import pluralize from 'pluralize';
 
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
@@ -90,7 +90,8 @@ export default class DeleteAction extends Component {
       <div className="element-inline">
         <FlatButton label="Delete" onClick={this.handleOpen} />
         <Dialog
-          title={`Delete ${pluralize(activeType, 1)}`}
+          // title={`Delete ${pluralize(activeType, 1)}`}
+          title={`Delete ${activeType}`}
           actions={actions}
           modal
           open={open}
