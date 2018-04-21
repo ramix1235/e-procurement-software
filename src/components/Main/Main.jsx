@@ -1,78 +1,46 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-
-import { getProducts } from '../../redux/actions/productActions';
-import { getCategories } from '../../redux/actions/categoryActions';
-import { getCurrencies } from '../../redux/actions/currencyActions';
-import { getSuppliers } from '../../redux/actions/supplierActions';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import { Tabs, Tab } from 'material-ui/Tabs';
-import AppBar from 'material-ui/AppBar';
-import ActiveContent from '../ActiveContent';
-import DataCharts from '../DataCharts';
 
-@connect(state => ({
-  products: state.products,
-  categories: state.categories,
-  currencies: state.currencies,
-  suppliers: state.suppliers,
-}))
+import { TABS_TYPES } from '@constants/tabs';
+
 export default class Main extends Component {
-  static propTypes = {
-    categories: PropTypes.array.isRequired,
-    currencies: PropTypes.array.isRequired,
-    products: PropTypes.array.isRequired,
-    suppliers: PropTypes.array.isRequired,
+  state = {
+    activeTab: TABS_TYPES.INVENTORY,
   }
 
-  componentDidMount() {
-    const { dispatch } = this.props;
+  componentWillMount() {
+    this.updateTabData();
+  }
 
-    dispatch(getProducts());
-    dispatch(getCategories());
-    dispatch(getCurrencies());
-    dispatch(getSuppliers());
+  componentDidUpdate(prevProps, prevState) {
+    this.updateTabData();
+  }
+
+  handleOnChangeTabs = (tab) => {
+    this.setState({ activeTab: tab });
+    localStorage.setItem('activeTab', tab);
+  }
+
+  updateTabData = () => {
+    const { activeTab } = this.state;
+    const tab = localStorage.getItem('activeTab');
+
+    if (activeTab !== tab) {
+      this.setState({ activeTab: tab });
+    }
   }
 
   render() {
-    const {
-      categories,
-      currencies,
-      products,
-      suppliers,
-    } = this.props;
+    const { activeTab } = this.state;
 
     return (
-      <Fragment>
-        <AppBar
-          title="Friendly Suppliers"
-          iconStyleLeft={{ display: 'none' }}
-        />
-        <Tabs className="space-top-xs">
-          <Tab label="Inventory">
-            <ActiveContent data={{
-              categories,
-              currencies,
-              products,
-              suppliers,
-            }}
-            />
-          </Tab>
-          <Tab label="Charts">
-            <DataCharts data={{
-              categories,
-              currencies,
-              products,
-              suppliers,
-            }}
-            />
-          </Tab>
-          <Tab label="Orders">
-            <div>Orders</div>
-          </Tab>
-        </Tabs>
-      </Fragment>
+      <Tabs className="m-t-3" onChange={this.handleOnChangeTabs} value={activeTab}>
+        <Tab value="inventory" label="Inventory" containerElement={<Link to="/inventory" href />} />
+        <Tab value="charts" label="Charts" containerElement={<Link to="/charts" href />} />
+        <Tab value="orders" label="Orders" containerElement={<Link to="/orders" href />} />
+      </Tabs>
     );
   }
 }

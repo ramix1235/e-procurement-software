@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export function getCurrencies() {
   return (dispatch) => {
-    axios
+    return axios
       .get('/api/currency/getCurrencies')
       .then((currencies) => {
         dispatch({ type: 'GET_CURRENCIES_SUCCESS', payload: currencies.data });
@@ -14,7 +14,7 @@ export function getCurrencies() {
 
 export function addCurrency(newCurrency) {
   return (dispatch) => {
-    axios
+    return axios
       .post('/api/currency/addCurrency', {
         currency: newCurrency,
       })

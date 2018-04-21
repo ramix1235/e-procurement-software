@@ -14,13 +14,13 @@ export default class ProductController extends BaseController {
       suppliers: req.body.product.suppliers,
     });
 
-    if (!newProduct.suppliers.length) {
-      console.log('Save failed!');
-      return res.status(400).send({
-        success: false,
-        message: 'failed',
-      });
-    }
+    // if (!newProduct.suppliers.length) {
+    //   console.log('Save failed!');
+    //   return res.status(400).send({
+    //     success: false,
+    //     message: 'failed',
+    //   });
+    // }
 
     newProduct.save((err, product) => {
       // if (err) return super.newError(400, err.message);
@@ -67,13 +67,13 @@ export default class ProductController extends BaseController {
       suppliers: req.body.product.suppliers,
     });
 
-    if (!editingProduct.suppliers.length) {
-      console.log('Save failed!');
-      return res.status(400).send({
-        success: false,
-        message: 'failed',
-      });
-    }
+    // if (!editingProduct.suppliers.length) {
+    //   console.log('Edit failed!');
+    //   return res.status(400).send({
+    //     success: false,
+    //     message: 'failed',
+    //   });
+    // }
 
     Product.findByIdAndUpdate(editingProduct._id, editingProduct, (err, product) => {
       if (err) {

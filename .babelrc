@@ -15,7 +15,8 @@
         ],
         "alias": {
           "@root": "./",
-          "@components": "./src/components/"
+          "@components": "./src/components/",
+          "@constants": "./src/constants/"
         }
       }
     ]

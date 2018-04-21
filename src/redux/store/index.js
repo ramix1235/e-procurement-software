@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import rootReducer from '../reducers';
 
-export default (initialState) => {
+export default () => {
   let enhancer = applyMiddleware(thunk);
 
   if (process.env.NODE_ENV !== 'production') {
@@ -10,7 +10,7 @@ export default (initialState) => {
 
     enhancer = composeWithDevTools(applyMiddleware(thunk));
   }
-  const store = createStore(rootReducer, initialState, enhancer);
+  const store = createStore(rootReducer, {}, enhancer);
 
   return store;
 };

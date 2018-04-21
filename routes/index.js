@@ -9,7 +9,7 @@ export default (app) => {
   productRoutes(app);
   supplierRoute(app);
 
-  app.get(['/'], (req, res) => {
+  app.get(['/*'], (req, res) => {
     res.render('layout');
   });
 };
