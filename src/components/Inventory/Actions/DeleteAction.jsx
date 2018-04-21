@@ -91,7 +91,6 @@ export default class DeleteAction extends Component {
         <FlatButton label="Delete" onClick={this.handleOpen} />
         <Dialog
           title={`Delete ${pluralize(activeType, 1)}`}
-          // title={`Delete ${activeType}`}
           actions={actions}
           modal
           open={open}

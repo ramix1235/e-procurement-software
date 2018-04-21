@@ -113,7 +113,6 @@ export default class EditAction extends Component {
         <FlatButton label="Edit" onClick={this.handleOpen} />
         <Dialog
           title={`Edit ${pluralize(activeType, 1)}`}
-          // title={`Edit ${activeType}`}
           actions={actions}
           modal
           open={open}

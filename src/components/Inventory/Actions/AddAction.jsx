@@ -109,7 +109,6 @@ export default class AddAction extends Component {
         <RaisedButton label="Add" onClick={this.handleOpen} />
         <Dialog
           title={`Add ${pluralize(activeType, 1)}`}
-          // title={`Add ${activeType}`}
           actions={actions}
           modal
           open={open}
