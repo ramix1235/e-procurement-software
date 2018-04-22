@@ -16,8 +16,13 @@ const supplierSchema = new Schema({
   },
   products: [
     {
-      type: Schema.Types.ObjectId,
-      ref: 'Product',
+      product: {
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
+      },
+      price: {
+        type: Number,
+      },
     },
   ],
 }, {

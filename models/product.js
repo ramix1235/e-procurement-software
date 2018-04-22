@@ -11,10 +11,6 @@ const productSchema = new Schema({
     required: true,
     // unique: true,
   },
-  price: {
-    type: Number,
-    required: true,
-  },
   category: {
     type: Schema.Types.ObjectId,
     required: true,
@@ -27,9 +23,13 @@ const productSchema = new Schema({
   },
   suppliers: [
     {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: 'Supplier',
+      supplier: {
+        type: Schema.Types.ObjectId,
+        ref: 'Supplier',
+      },
+      price: {
+        type: Number,
+      },
     },
   ],
 }, {

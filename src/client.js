@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -11,12 +11,14 @@ const faviconUrl = '../public/favs/favicon32x32.ico';
 
 ReactDOM.render(
   <MuiThemeProvider>
-    <Favicon url={faviconUrl} />
-    <Provider store={configureStore()}>
-      <BrowserRouter>
-        {routes}
-      </BrowserRouter>
-    </Provider>
+    <Fragment>
+      <Favicon url={faviconUrl} />
+      <Provider store={configureStore()}>
+        <BrowserRouter>
+          {routes}
+        </BrowserRouter>
+      </Provider>
+    </Fragment>
   </MuiThemeProvider>,
   document.getElementById('react-view')
 );

@@ -44,7 +44,7 @@ export default class InventoryProducts extends Component {
     header.push({ tooltip: 'The Name', data: 'Name' });
     header.push({ tooltip: 'The Vendor Code', data: 'Vendor Code' });
     header.push({ tooltip: 'The Category', data: 'Category' });
-    header.push({ tooltip: 'The Price', data: 'Price' });
+    header.push({ tooltip: 'The Min Price', data: 'Min Price' });
     header.push({ tooltip: 'The Currency', data: 'Currency' });
     header.push({ tooltip: 'The Actions', data: 'Actions' });
 
@@ -68,17 +68,20 @@ export default class InventoryProducts extends Component {
   updateTableData = () => {
     const { tableData: { header } } = this.state;
     const { products, activeType } = this.props;
-    const updatedModelData = products.map((product, idx) => (
-      {
+
+    const updatedModelData = products.map((product, idx) => {
+      const minPrice = Math.min(...product.suppliers.map(supplier => supplier.price));
+
+      return {
         id: idx,
         name: product.name,
         vendorCode: product.vendorCode,
         category: product.category.name,
-        price: product.price,
+        price: Number.isFinite(minPrice) ? minPrice : 0,
         currency: product.currency.name,
         actions: <Actions item={product} activeType={activeType} />,
-      }
-    ));
+      };
+    });
 
     this.setState({ tableData: { body: updatedModelData, header } });
   }

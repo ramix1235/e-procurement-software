@@ -9,7 +9,6 @@ export default class ProductController extends BaseController {
       name: req.body.product.name,
       vendorCode: req.body.product.vendorCode,
       category: req.body.product.category,
-      price: req.body.product.price,
       currency: req.body.product.currency,
       suppliers: req.body.product.suppliers,
     });
@@ -32,11 +31,11 @@ export default class ProductController extends BaseController {
         });
       }
 
-      newProduct.suppliers.forEach((item) => {
+      newProduct.suppliers.forEach((supplier) => {
         Supplier.findByIdAndUpdate(
-          item,
-          { $push: { products: newProduct._id } },
-          (error, supplier) => {
+          supplier.supplier,
+          { $push: { products: { product: newProduct._id, price: supplier.price } } },
+          (error, item) => {
             if (error) {
               console.log('Save failed!');
               return res.status(400).send({
@@ -62,18 +61,9 @@ export default class ProductController extends BaseController {
       name: req.body.product.name,
       vendorCode: req.body.product.vendorCode,
       category: req.body.product.category,
-      price: req.body.product.price,
       currency: req.body.product.currency,
       suppliers: req.body.product.suppliers,
     });
-
-    // if (!editingProduct.suppliers.length) {
-    //   console.log('Edit failed!');
-    //   return res.status(400).send({
-    //     success: false,
-    //     message: 'failed',
-    //   });
-    // }
 
     Product.findByIdAndUpdate(editingProduct._id, editingProduct, (err, product) => {
       if (err) {
@@ -83,41 +73,48 @@ export default class ProductController extends BaseController {
           message: 'failed',
         });
       }
-      // console.log(product.suppliers);
-      product.suppliers.forEach((item) => {
-        Supplier.findByIdAndUpdate(
-          item,
-          { $pull: { products: product._id } },
-          (error, supplier) => {
-            if (error) {
-              console.log('Edit failed!');
-              return res.status(400).send({
-                success: false,
-                message: 'failed',
-              });
+
+      const editPromise = new Promise((resolve, reject) => {
+        if (!product.suppliers.length > 0) resolve(res);
+        product.suppliers.forEach((supplier) => {
+          Supplier.findByIdAndUpdate(
+            supplier.supplier,
+            { $pull: { products: { product: product._id } } },
+            (error, item) => {
+              if (error) {
+                console.log('Edit failed!');
+                reject(res.status(400).send({
+                  success: false,
+                  message: 'failed',
+                }));
+              }
+              resolve(res);
             }
-            return res;
-          }
-        );
+          );
+        });
       });
 
-      editingProduct.suppliers.forEach((item) => {
-        Supplier.findByIdAndUpdate(
-          item,
-          { $push: { products: editingProduct._id } },
-          { new: true, upsert: true },
-          (error, supplier) => {
-            if (error) {
-              console.log('Edit failed!');
-              return res.status(400).send({
-                success: false,
-                message: 'failed',
-              });
-            }
-            return res;
+      editPromise
+        .then(() => {
+          if (editingProduct.suppliers.length > 0) {
+            editingProduct.suppliers.forEach((supplier) => {
+              Supplier.findByIdAndUpdate(
+                supplier.supplier,
+                { $push: { products: { product: editingProduct._id, price: supplier.price } } },
+                (error, item) => {
+                  if (error) {
+                    console.log('Edit failed!');
+                    return res.status(400).send({
+                      success: false,
+                      message: 'failed',
+                    });
+                  }
+                  return res;
+                }
+              );
+            });
           }
-        );
-      });
+        });
 
       console.log('Edit successfully!');
       this.getProducts(req, res);
@@ -140,11 +137,11 @@ export default class ProductController extends BaseController {
         });
       }
 
-      product.suppliers.forEach((item) => {
+      product.suppliers.forEach((supplier) => {
         Supplier.findByIdAndUpdate(
-          item,
-          { $pull: { products: product._id } },
-          (error, supplier) => {
+          supplier.supplier,
+          { $pull: { products: { product: deletingProduct._id } } },
+          (error, item) => {
             if (error) {
               console.log('Delete failed!');
               return res.status(400).send({
@@ -165,11 +162,7 @@ export default class ProductController extends BaseController {
 
   static getProducts(req, res) {
     Product.find({})
-      .populate('category currency')
-      .populate({
-        path: 'suppliers',
-        model: Supplier,
-      })
+      .populate('category currency suppliers.supplier')
       .exec((err, products) => {
         if (err) throw err;
         res.send(products);

@@ -44,7 +44,6 @@ export default class ProductForm extends Component {
       name: '',
       vendorCode: '',
       category: '',
-      price: 0,
       currency: '',
       suppliers: [],
     },
@@ -53,7 +52,7 @@ export default class ProductForm extends Component {
   state = {
     categoryBy: this.props.item.category._id,
     currencyBy: this.props.item.currency._id,
-    checkedItems: [],
+    checkedSuppliers: [],
   }
 
   componentWillMount() {
@@ -84,12 +83,12 @@ export default class ProductForm extends Component {
     dispatch(getSuppliers())
       .then((suppliers) => {
         const checked = suppliers.filter((supplier, index) => (
-          item.suppliers.find(currSupplier => supplier._id === currSupplier._id)
+          item.suppliers.find(obj => obj.supplier._id === supplier._id)
         ));
 
         if (checked.length > 0) {
           this.setState(prevState => ({
-            checkedItems: [...prevState.checkedItems, ...checked],
+            checkedSuppliers: [...prevState.checkedSuppliers, ...checked],
           }));
         }
       });
@@ -109,37 +108,82 @@ export default class ProductForm extends Component {
 
   handleSubmitClick = () => {
     const { onSubmit, item } = this.props;
-    const { currencyBy, categoryBy, checkedItems } = this.state;
+    const { currencyBy, categoryBy, checkedSuppliers } = this.state;
+
+    const formattedCheckedSuppliers = checkedSuppliers
+      .map((supplier) => {
+        const productIndex = supplier.products.findIndex(obj => obj.product._id === item._id);
+
+        return {
+          supplier: supplier._id,
+          price: supplier.products.length > 0 ? supplier.products[productIndex].price : 0,
+        };
+      });
 
     const model = {
       _id: item._id,
       name: this.nameField.input.value,
       vendorCode: this.vendorCodeField.input.value,
       category: categoryBy,
-      price: +this.priceField.input.value,
       currency: currencyBy,
-      suppliers: checkedItems,
+      suppliers: formattedCheckedSuppliers,
     };
 
     onSubmit(model);
   }
 
-  handleCheckBoxCheck = (e, isInputChecked, item) => {
-    const { checkedItems } = this.state;
-    const temporaryCheckedItems = cloneDeep(checkedItems);
-    const itemIndex = temporaryCheckedItems.findIndex(obj => obj._id === item._id);
+  handleCheckBoxCheck = (e, isInputChecked, checkedSupplier, formProduct) => {
+    const { checkedSuppliers } = this.state;
+    const temporaryCheckedSuppliers = cloneDeep(checkedSuppliers);
 
     if (isInputChecked) {
+      const productModel = {
+        product: formProduct,
+        price: 0,
+      };
+
+      const existedFormProductIndex = checkedSupplier.products.findIndex(obj => obj.product._id === formProduct._id);
+
+      if (existedFormProductIndex >= 0) {
+        checkedSupplier.products.splice(existedFormProductIndex, 1);
+      }
+
+      checkedSupplier.products.push(productModel);
+
       this.setState(prevState => ({
-        checkedItems: [...prevState.checkedItems, item],
+        checkedSuppliers: [...prevState.checkedSuppliers, checkedSupplier],
       }));
       return;
     }
 
-    temporaryCheckedItems.splice(itemIndex, 1);
+
+    const checkedSupplierIndex = temporaryCheckedSuppliers.findIndex(obj => obj._id === checkedSupplier._id);
+
+    temporaryCheckedSuppliers.splice(checkedSupplierIndex, 1);
 
     this.setState({
-      checkedItems: temporaryCheckedItems,
+      checkedSuppliers: temporaryCheckedSuppliers,
+    });
+  }
+
+  handlePriceFieldChange = (e, checkedSupplier, formProduct) => {
+    const { checkedSuppliers } = this.state;
+    const temporaryCheckedSuppliers = cloneDeep(checkedSuppliers);
+
+    const checkedSupplierIndex = temporaryCheckedSuppliers.findIndex(obj => obj._id === checkedSupplier._id);
+
+    if (formProduct._id) {
+      const productIndex = temporaryCheckedSuppliers[checkedSupplierIndex].products.findIndex(obj => obj.product._id === formProduct._id);
+
+      temporaryCheckedSuppliers[checkedSupplierIndex].products[productIndex].price = +e.target.value;
+    } else {
+      const emptyProductIndex = temporaryCheckedSuppliers[checkedSupplierIndex].products.findIndex(obj => obj.product._id === null);
+
+      temporaryCheckedSuppliers[checkedSupplierIndex].products[emptyProductIndex].price = +e.target.value;
+    }
+
+    this.setState({
+      checkedSuppliers: temporaryCheckedSuppliers,
     });
   }
 
@@ -159,6 +203,7 @@ export default class ProductForm extends Component {
       suppliers,
     } = this.props;
     const { categoryBy, currencyBy } = this.state;
+    const { checkedSuppliers } = this.state;
 
     return (
       <Fragment>
@@ -182,13 +227,6 @@ export default class ProductForm extends Component {
           ))}
         </DropDownMenu>
         <br />
-        <TextField
-          ref={(ref) => { this.priceField = ref; }}
-          floatingLabelText="Price"
-          className="space-left-s"
-          type="number"
-          defaultValue={item.price}
-        />
         <DropDownMenu className="dropdown-xs" value={currencyBy} onChange={this.handleDropDownCurrencies}>
           {currencies.map((currency, idx) => (
             <MenuItem key={`currency-${idx}`} value={currency._id} primaryText={currency.name} />
@@ -199,15 +237,37 @@ export default class ProductForm extends Component {
           <List>
             <Subheader>Suppliers</Subheader>
             {suppliers.map((supplier, index) => {
-              const checkedProduct = item.suppliers.find(currSupplier => supplier._id === currSupplier._id);
+              let checkedSupplierProduct = null;
+              const checkedSupplierIndex = checkedSuppliers.findIndex(obj => obj._id === supplier._id);
+
+              if (checkedSupplierIndex >= 0) {
+                const productIndex = checkedSuppliers[checkedSupplierIndex].products.findIndex(obj => obj.product._id === item._id);
+
+                checkedSupplierProduct = checkedSuppliers[checkedSupplierIndex].products[productIndex];
+              }
 
               return (
                 <Fragment key={`supplier-${index}`}>
                   <Divider />
                   <ListItem
-                    leftCheckbox={<Checkbox defaultChecked={!!checkedProduct} onCheck={(e, isInputChecked) => this.handleCheckBoxCheck(e, isInputChecked, supplier)} />}
+                    leftCheckbox={
+                      <Checkbox
+                        defaultChecked={!!checkedSupplierProduct}
+                        onCheck={(e, isInputChecked) => this.handleCheckBoxCheck(e, isInputChecked, supplier, item)}
+                      />
+                    }
                     primaryText={supplier.name}
-                    secondaryText={supplier.telephone}
+                    secondaryTextLines={2}
+                    secondaryText={
+                      <TextField
+                        className="nestedField"
+                        type="number"
+                        disabled={!checkedSupplierProduct}
+                        defaultValue={0}
+                        value={checkedSupplierProduct ? checkedSupplierProduct.price : 0}
+                        onChange={e => this.handlePriceFieldChange(e, supplier, item)}
+                      />
+                    }
                   />
                 </Fragment>
               );

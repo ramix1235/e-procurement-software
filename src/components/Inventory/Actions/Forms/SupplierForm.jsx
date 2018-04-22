@@ -42,7 +42,7 @@ export default class ProductForm extends Component {
   }
 
   state = {
-    checkedItems: [],
+    checkedProducts: [],
   }
 
   componentWillMount() {
@@ -71,12 +71,12 @@ export default class ProductForm extends Component {
     dispatch(getProducts())
       .then((products) => {
         const checked = products.filter((product, index) => (
-          item.products.find(currProduct => product._id === currProduct._id)
+          item.products.find(obj => obj.product._id === product._id)
         ));
 
         if (checked.length > 0) {
           this.setState(prevState => ({
-            checkedItems: [...prevState.checkedItems, ...checked],
+            checkedProducts: [...prevState.checkedProducts, ...checked],
           }));
         }
       });
@@ -84,35 +84,81 @@ export default class ProductForm extends Component {
 
   handleSubmitClick = () => {
     const { onSubmit, item } = this.props;
-    const { checkedItems } = this.state;
+    const { checkedProducts } = this.state;
+
+    const formattedCheckedProducts = checkedProducts
+      .map((product) => {
+        const supplierIndex = product.suppliers.findIndex(obj => obj.supplier._id === item._id);
+
+        return {
+          product: product._id,
+          price: product.suppliers.length > 0 ? product.suppliers[supplierIndex].price : 0,
+        };
+      });
 
     const model = {
       _id: item._id,
       name: this.nameField.input.value,
       address: this.addressField.input.value,
       telephone: +this.telephoneField.input.value,
-      products: checkedItems,
+      products: formattedCheckedProducts,
     };
 
     onSubmit(model);
   }
 
-  handleCheckBoxCheck = (e, isInputChecked, item) => {
-    const { checkedItems } = this.state;
-    const temporaryCheckedItems = cloneDeep(checkedItems);
-    const itemIndex = temporaryCheckedItems.findIndex(obj => obj._id === item._id);
+  handleCheckBoxCheck = (e, isInputChecked, checkedProduct, formSupplier) => {
+    const { checkedProducts } = this.state;
+    const temporaryCheckedProducts = cloneDeep(checkedProducts);
 
     if (isInputChecked) {
+      const supplierModel = {
+        supplier: formSupplier,
+        price: 0,
+      };
+
+      const existedFormSupplierIndex = checkedProduct.suppliers.findIndex(obj => obj.supplier._id === formSupplier._id);
+
+      if (existedFormSupplierIndex >= 0) {
+        checkedProduct.suppliers.splice(existedFormSupplierIndex, 1);
+      }
+
+      checkedProduct.suppliers.push(supplierModel);
+
       this.setState(prevState => ({
-        checkedItems: [...prevState.checkedItems, item],
+        checkedProducts: [...prevState.checkedProducts, checkedProduct],
       }));
       return;
     }
 
-    temporaryCheckedItems.splice(itemIndex, 1);
+    const checkedProductIndex = temporaryCheckedProducts.findIndex(obj => obj._id === checkedProduct._id);
+
+    temporaryCheckedProducts.splice(checkedProductIndex, 1);
 
     this.setState({
-      checkedItems: temporaryCheckedItems,
+      checkedProducts: temporaryCheckedProducts,
+    });
+  }
+
+  handlePriceFieldChange = (e, checkedProduct, formSupplier) => {
+    const { checkedProducts } = this.state;
+    const temporaryCheckedProducts = cloneDeep(checkedProducts);
+
+    const checkedProductIndex = temporaryCheckedProducts.findIndex(obj => obj._id === checkedProduct._id);
+
+    if (formSupplier._id) {
+      // const checkedProductIndex = temporaryCheckedProducts.findIndex(obj => obj._id === checkedProductSupplier.product._id);
+      const supplierIndex = temporaryCheckedProducts[checkedProductIndex].suppliers.findIndex(obj => obj.supplier._id === formSupplier._id);
+
+      temporaryCheckedProducts[checkedProductIndex].suppliers[supplierIndex].price = +e.target.value;
+    } else {
+      const emptySupplierIndex = temporaryCheckedProducts[checkedProductIndex].suppliers.findIndex(obj => obj.supplier._id === null);
+
+      temporaryCheckedProducts[checkedProductIndex].suppliers[emptySupplierIndex].price = +e.target.value;
+    }
+
+    this.setState({
+      checkedProducts: temporaryCheckedProducts,
     });
   }
 
@@ -127,6 +173,7 @@ export default class ProductForm extends Component {
       item,
       products,
     } = this.props;
+    const { checkedProducts } = this.state;
 
     return (
       <Fragment>
@@ -156,15 +203,38 @@ export default class ProductForm extends Component {
           <List>
             <Subheader>Products</Subheader>
             {products.map((product, index) => {
-              const checkedSupplier = item.products.find(currProduct => product._id === currProduct._id);
+              let checkedProductSupplier = null;
+              const checkedProductIndex = checkedProducts.findIndex(obj => obj._id === product._id);
+
+              if (checkedProductIndex >= 0) {
+                const supplierIndex = checkedProducts[checkedProductIndex].suppliers.findIndex(obj => obj.supplier._id === item._id);
+
+                checkedProductSupplier = checkedProducts[checkedProductIndex].suppliers[supplierIndex];
+              }
 
               return (
                 <Fragment key={`product-${index}`}>
                   <Divider />
                   <ListItem
-                    leftCheckbox={<Checkbox defaultChecked={!!checkedSupplier} onCheck={(e, isInputChecked) => this.handleCheckBoxCheck(e, isInputChecked, product)} />}
+                    leftCheckbox={
+                      <Checkbox
+                        defaultChecked={!!checkedProductSupplier}
+                        onCheck={(e, isInputChecked) => this.handleCheckBoxCheck(e, isInputChecked, product, item)}
+                      />
+                    }
                     primaryText={product.name}
-                    secondaryText={product.telephone}
+                    secondaryTextLines={2}
+                    secondaryText={
+                      <TextField
+                        className="nestedField"
+                        type="number"
+                        disabled={!checkedProductSupplier}
+                        defaultValue={0}
+                        value={checkedProductSupplier ? checkedProductSupplier.price : 0}
+
+                        onChange={e => this.handlePriceFieldChange(e, product, item)}
+                      />
+                    }
                   />
                 </Fragment>
               );
