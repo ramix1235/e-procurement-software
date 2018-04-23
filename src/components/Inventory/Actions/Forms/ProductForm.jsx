@@ -116,7 +116,7 @@ export default class ProductForm extends Component {
 
         return {
           supplier: supplier._id,
-          price: supplier.products.length > 0 ? supplier.products[productIndex].price : 0,
+          price: supplier.products.length > 0 ? parseFloat(supplier.products[productIndex].price) : 0,
         };
       });
 
@@ -168,18 +168,26 @@ export default class ProductForm extends Component {
 
   handlePriceFieldChange = (e, checkedSupplier, formProduct) => {
     const { checkedSuppliers } = this.state;
+    const { target: { value } } = e;
     const temporaryCheckedSuppliers = cloneDeep(checkedSuppliers);
+    let number = value;
+    const numberWithTwoDecimal = /^\d+\.?\d{0,2}$/;
+    const numberWithLeadNull = /^0\d+$/;
+
+    if (!number) number = '0';
+    if (!number.match(numberWithTwoDecimal)) return;
+    if (number.match(numberWithLeadNull)) number = number.substring(1);
 
     const checkedSupplierIndex = temporaryCheckedSuppliers.findIndex(obj => obj._id === checkedSupplier._id);
 
     if (formProduct._id) {
       const productIndex = temporaryCheckedSuppliers[checkedSupplierIndex].products.findIndex(obj => obj.product._id === formProduct._id);
 
-      temporaryCheckedSuppliers[checkedSupplierIndex].products[productIndex].price = +e.target.value;
+      temporaryCheckedSuppliers[checkedSupplierIndex].products[productIndex].price = number;
     } else {
       const emptyProductIndex = temporaryCheckedSuppliers[checkedSupplierIndex].products.findIndex(obj => obj.product._id === null);
 
-      temporaryCheckedSuppliers[checkedSupplierIndex].products[emptyProductIndex].price = +e.target.value;
+      temporaryCheckedSuppliers[checkedSupplierIndex].products[emptyProductIndex].price = number;
     }
 
     this.setState({
@@ -261,7 +269,6 @@ export default class ProductForm extends Component {
                     secondaryText={
                       <TextField
                         className="nestedField"
-                        type="number"
                         disabled={!checkedSupplierProduct}
                         defaultValue={0}
                         value={checkedSupplierProduct ? checkedSupplierProduct.price : 0}

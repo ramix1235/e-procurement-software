@@ -92,7 +92,7 @@ export default class ProductForm extends Component {
 
         return {
           product: product._id,
-          price: product.suppliers.length > 0 ? product.suppliers[supplierIndex].price : 0,
+          price: product.suppliers.length > 0 ? parseFloat(product.suppliers[supplierIndex].price) : 0,
         };
       });
 
@@ -100,7 +100,7 @@ export default class ProductForm extends Component {
       _id: item._id,
       name: this.nameField.input.value,
       address: this.addressField.input.value,
-      telephone: +this.telephoneField.input.value,
+      telephone: this.telephoneField.input.value,
       products: formattedCheckedProducts,
     };
 
@@ -142,7 +142,15 @@ export default class ProductForm extends Component {
 
   handlePriceFieldChange = (e, checkedProduct, formSupplier) => {
     const { checkedProducts } = this.state;
+    const { target: { value } } = e;
     const temporaryCheckedProducts = cloneDeep(checkedProducts);
+    let number = value;
+    const numberWithTwoDecimal = /^\d+\.?\d{0,2}$/;
+    const numberWithLeadNull = /^0\d+$/;
+
+    if (!number) number = '0';
+    if (!number.match(numberWithTwoDecimal)) return;
+    if (number.match(numberWithLeadNull)) number = number.substring(1);
 
     const checkedProductIndex = temporaryCheckedProducts.findIndex(obj => obj._id === checkedProduct._id);
 
@@ -150,11 +158,11 @@ export default class ProductForm extends Component {
       // const checkedProductIndex = temporaryCheckedProducts.findIndex(obj => obj._id === checkedProductSupplier.product._id);
       const supplierIndex = temporaryCheckedProducts[checkedProductIndex].suppliers.findIndex(obj => obj.supplier._id === formSupplier._id);
 
-      temporaryCheckedProducts[checkedProductIndex].suppliers[supplierIndex].price = +e.target.value;
+      temporaryCheckedProducts[checkedProductIndex].suppliers[supplierIndex].price = number;
     } else {
       const emptySupplierIndex = temporaryCheckedProducts[checkedProductIndex].suppliers.findIndex(obj => obj.supplier._id === null);
 
-      temporaryCheckedProducts[checkedProductIndex].suppliers[emptySupplierIndex].price = +e.target.value;
+      temporaryCheckedProducts[checkedProductIndex].suppliers[emptySupplierIndex].price = number;
     }
 
     this.setState({
@@ -195,7 +203,6 @@ export default class ProductForm extends Component {
           ref={(ref) => { this.telephoneField = ref; }}
           floatingLabelText="Telephone"
           className="space-left-s"
-          type="number"
           defaultValue={item.telephone}
         />
         <br />
@@ -227,7 +234,6 @@ export default class ProductForm extends Component {
                     secondaryText={
                       <TextField
                         className="nestedField"
-                        type="number"
                         disabled={!checkedProductSupplier}
                         defaultValue={0}
                         value={checkedProductSupplier ? checkedProductSupplier.price : 0}
