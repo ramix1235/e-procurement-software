@@ -40,6 +40,10 @@
     margin-left: 1em;
 }
 
+.gray-text {
+  color: #D3D3D3
+}
+
 .spinner {
   display: flex;
   justify-content: center;
@@ -223,4 +227,16 @@
 
 .f-d-row {
   flex-direction: row;
+}
+
+@for $i from 1 through 50 {
+  .f-s-#{$i} {
+      font-size: $i + 0px;
+  }
+}
+
+@for $i from 1 through 9 {
+  .f-w-#{$i} {
+      font-weight: $i * 100;
+  }
 }

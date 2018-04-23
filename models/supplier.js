@@ -8,9 +8,11 @@ const supplierSchema = new Schema({
   },
   address: {
     type: String,
-    required: true,
   },
-  telephone: {
+  phone: {
+    type: String,
+  },
+  email: {
     type: String,
     required: true,
   },

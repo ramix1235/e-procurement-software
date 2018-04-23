@@ -8,7 +8,8 @@ export default class SupplierController extends BaseController {
     const newSupplier = new Supplier({
       name: req.body.supplier.name,
       address: req.body.supplier.address,
-      telephone: req.body.supplier.telephone,
+      phone: req.body.supplier.phone,
+      email: req.body.supplier.email,
       products: req.body.supplier.products,
     });
 
@@ -52,7 +53,8 @@ export default class SupplierController extends BaseController {
       _id: req.body.supplier._id,
       name: req.body.supplier.name,
       address: req.body.supplier.address,
-      telephone: req.body.supplier.telephone,
+      phone: req.body.supplier.phone,
+      email: req.body.supplier.email,
       products: req.body.supplier.products,
     });
 

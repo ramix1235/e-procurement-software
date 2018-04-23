@@ -9,7 +9,6 @@ import {
   TableHeaderColumn,
   TableRowColumn,
 } from 'material-ui';
-import CircularProgress from 'material-ui/CircularProgress';
 
 export default class DataTable extends Component {
   static propTypes = {
@@ -36,7 +35,7 @@ export default class DataTable extends Component {
   render() {
     const { header, body } = this.props;
 
-    if (!header.length > 0 || !body.length > 0) return <div className="spinner"><CircularProgress size={80} thickness={5} /></div>;
+    if (!body.length > 0) return <div className="spinner f-s-48 gray-text">Please add your first item</div>;
 
     return (
       <Table

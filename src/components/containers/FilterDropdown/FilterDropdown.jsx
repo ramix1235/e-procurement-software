@@ -43,7 +43,8 @@ export default class FilterDropdown extends Component {
         return [
           <MenuItem key={0} value="name" primaryText="Name" />,
           <MenuItem key={1} value="address" primaryText="Address" />,
-          <MenuItem key={2} value="telephone" primaryText="Telephone" />,
+          <MenuItem key={2} value="phone" primaryText="Phone" />,
+          <MenuItem key={2} value="email" primaryText="Email" />,
         ];
       default:
         return <div />;

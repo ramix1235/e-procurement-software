@@ -36,7 +36,8 @@ export default class ProductForm extends Component {
       _id: null,
       name: '',
       address: '',
-      telephone: '',
+      phone: '',
+      email: '',
       products: [],
     },
   }
@@ -100,7 +101,8 @@ export default class ProductForm extends Component {
       _id: item._id,
       name: this.nameField.input.value,
       address: this.addressField.input.value,
-      telephone: this.telephoneField.input.value,
+      phone: this.phoneField.input.value,
+      email: this.emailField.input.value,
       products: formattedCheckedProducts,
     };
 
@@ -176,12 +178,50 @@ export default class ProductForm extends Component {
     dispatch(getProducts());
   }
 
-  render() {
-    const {
-      item,
-      products,
-    } = this.props;
+  renderProducts = () => {
     const { checkedProducts } = this.state;
+    const { products, item } = this.props;
+
+    return products.map((product, index) => {
+      let checkedProductSupplier = null;
+      const checkedProductIndex = checkedProducts.findIndex(obj => obj._id === product._id);
+
+      if (checkedProductIndex >= 0) {
+        const supplierIndex = checkedProducts[checkedProductIndex].suppliers.findIndex(obj => obj.supplier._id === item._id);
+
+        checkedProductSupplier = checkedProducts[checkedProductIndex].suppliers[supplierIndex];
+      }
+
+      return (
+        <Fragment key={`product-${index}`}>
+          <Divider />
+          <ListItem
+            leftCheckbox={
+              <Checkbox
+                defaultChecked={!!checkedProductSupplier}
+                onCheck={(e, isInputChecked) => this.handleCheckBoxCheck(e, isInputChecked, product, item)}
+              />
+            }
+            primaryText={product.name}
+            secondaryTextLines={2}
+            secondaryText={
+              <TextField
+                className="nestedField"
+                disabled={!checkedProductSupplier}
+                defaultValue={0}
+                value={checkedProductSupplier ? checkedProductSupplier.price : 0}
+
+                onChange={e => this.handlePriceFieldChange(e, product, item)}
+              />
+            }
+          />
+        </Fragment>
+      );
+    });
+  }
+
+  render() {
+    const { item } = this.props;
 
     return (
       <Fragment>
@@ -200,51 +240,23 @@ export default class ProductForm extends Component {
         />
         <br />
         <TextField
-          ref={(ref) => { this.telephoneField = ref; }}
-          floatingLabelText="Telephone"
+          ref={(ref) => { this.phoneField = ref; }}
+          floatingLabelText="Phone"
           className="space-left-s"
-          defaultValue={item.telephone}
+          defaultValue={item.phone}
+        />
+        <br />
+        <TextField
+          ref={(ref) => { this.emailField = ref; }}
+          floatingLabelText="E-mail"
+          className="space-left-s"
+          defaultValue={item.email}
         />
         <br />
         <Drawer open={false}>
           <List>
             <Subheader>Products</Subheader>
-            {products.map((product, index) => {
-              let checkedProductSupplier = null;
-              const checkedProductIndex = checkedProducts.findIndex(obj => obj._id === product._id);
-
-              if (checkedProductIndex >= 0) {
-                const supplierIndex = checkedProducts[checkedProductIndex].suppliers.findIndex(obj => obj.supplier._id === item._id);
-
-                checkedProductSupplier = checkedProducts[checkedProductIndex].suppliers[supplierIndex];
-              }
-
-              return (
-                <Fragment key={`product-${index}`}>
-                  <Divider />
-                  <ListItem
-                    leftCheckbox={
-                      <Checkbox
-                        defaultChecked={!!checkedProductSupplier}
-                        onCheck={(e, isInputChecked) => this.handleCheckBoxCheck(e, isInputChecked, product, item)}
-                      />
-                    }
-                    primaryText={product.name}
-                    secondaryTextLines={2}
-                    secondaryText={
-                      <TextField
-                        className="nestedField"
-                        disabled={!checkedProductSupplier}
-                        defaultValue={0}
-                        value={checkedProductSupplier ? checkedProductSupplier.price : 0}
-
-                        onChange={e => this.handlePriceFieldChange(e, product, item)}
-                      />
-                    }
-                  />
-                </Fragment>
-              );
-            })}
+            {this.renderProducts()}
           </List>
         </Drawer>
       </Fragment>

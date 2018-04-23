@@ -203,15 +203,55 @@ export default class ProductForm extends Component {
     dispatch(getSuppliers());
   }
 
+
+  renderSuppliers = () => {
+    const { checkedSuppliers } = this.state;
+    const { item, suppliers } = this.props;
+
+    return suppliers.map((supplier, index) => {
+      let checkedSupplierProduct = null;
+      const checkedSupplierIndex = checkedSuppliers.findIndex(obj => obj._id === supplier._id);
+
+      if (checkedSupplierIndex >= 0) {
+        const productIndex = checkedSuppliers[checkedSupplierIndex].products.findIndex(obj => obj.product._id === item._id);
+
+        checkedSupplierProduct = checkedSuppliers[checkedSupplierIndex].products[productIndex];
+      }
+
+      return (
+        <Fragment key={`supplier-${index}`}>
+          <Divider />
+          <ListItem
+            leftCheckbox={
+              <Checkbox
+                defaultChecked={!!checkedSupplierProduct}
+                onCheck={(e, isInputChecked) => this.handleCheckBoxCheck(e, isInputChecked, supplier, item)}
+              />
+            }
+            primaryText={supplier.name}
+            secondaryTextLines={2}
+            secondaryText={
+              <TextField
+                className="nestedField"
+                disabled={!checkedSupplierProduct}
+                defaultValue={0}
+                value={checkedSupplierProduct ? checkedSupplierProduct.price : 0}
+                onChange={e => this.handlePriceFieldChange(e, supplier, item)}
+              />
+            }
+          />
+        </Fragment>
+      );
+    });
+  }
+
   render() {
     const {
       item,
       categories,
       currencies,
-      suppliers,
     } = this.props;
     const { categoryBy, currencyBy } = this.state;
-    const { checkedSuppliers } = this.state;
 
     return (
       <Fragment>
@@ -244,41 +284,7 @@ export default class ProductForm extends Component {
         <Drawer open={false}>
           <List>
             <Subheader>Suppliers</Subheader>
-            {suppliers.map((supplier, index) => {
-              let checkedSupplierProduct = null;
-              const checkedSupplierIndex = checkedSuppliers.findIndex(obj => obj._id === supplier._id);
-
-              if (checkedSupplierIndex >= 0) {
-                const productIndex = checkedSuppliers[checkedSupplierIndex].products.findIndex(obj => obj.product._id === item._id);
-
-                checkedSupplierProduct = checkedSuppliers[checkedSupplierIndex].products[productIndex];
-              }
-
-              return (
-                <Fragment key={`supplier-${index}`}>
-                  <Divider />
-                  <ListItem
-                    leftCheckbox={
-                      <Checkbox
-                        defaultChecked={!!checkedSupplierProduct}
-                        onCheck={(e, isInputChecked) => this.handleCheckBoxCheck(e, isInputChecked, supplier, item)}
-                      />
-                    }
-                    primaryText={supplier.name}
-                    secondaryTextLines={2}
-                    secondaryText={
-                      <TextField
-                        className="nestedField"
-                        disabled={!checkedSupplierProduct}
-                        defaultValue={0}
-                        value={checkedSupplierProduct ? checkedSupplierProduct.price : 0}
-                        onChange={e => this.handlePriceFieldChange(e, supplier, item)}
-                      />
-                    }
-                  />
-                </Fragment>
-              );
-            })}
+            {this.renderSuppliers()}
           </List>
         </Drawer>
       </Fragment>

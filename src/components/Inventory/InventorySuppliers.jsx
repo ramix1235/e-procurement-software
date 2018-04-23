@@ -43,7 +43,8 @@ export default class InventorySuppliers extends Component {
     header.push({ tooltip: 'The ID', data: 'ID' });
     header.push({ tooltip: 'The Name', data: 'Name' });
     header.push({ tooltip: 'The Address', data: 'Address' });
-    header.push({ tooltip: 'The Telephone', data: 'Telephone' });
+    header.push({ tooltip: 'The Phone', data: 'Phone' });
+    header.push({ tooltip: 'The Email', data: 'Email' });
     header.push({ tooltip: 'The Actions', data: 'Actions' });
 
     this.setState({ isLoading: true });
@@ -71,7 +72,8 @@ export default class InventorySuppliers extends Component {
         id: idx,
         name: supplier.name,
         address: supplier.address,
-        telephone: supplier.telephone,
+        phone: supplier.phone,
+        email: supplier.email,
         actions: <Actions item={supplier} activeType={activeType} />,
       }
     ));
