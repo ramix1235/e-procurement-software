@@ -142,7 +142,7 @@ export default class Charts extends Component {
             <Label value="Product name" position="insideBottom" offset={-30} />
           </XAxis>
           <YAxis>
-            <Label value="suppliers amount" angle={-90} position="insideBottomLeft" />
+            <Label value="Suppliers amount" angle={-90} position="insideBottomLeft" />
           </YAxis>
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
