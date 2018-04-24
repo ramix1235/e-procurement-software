@@ -1,19 +1,19 @@
 /* eslint-disable no-underscore-dangle */
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import pluralize from 'pluralize';
+import PropTypes from 'prop-types';
+
+import { editOrder } from '../../../redux/actions/orderActions';
 
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
 import Dialog from 'material-ui/Dialog';
+import OrderForm from './Forms/OrderForm';
 import Loader from '../../containers/Loader';
 
 @connect()
-export default class DeleteAction extends Component {
+export default class OrderAddAction extends Component {
   static propTypes = {
-    action: PropTypes.func.isRequired,
-    activeType: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
     item: PropTypes.object.isRequired,
   }
@@ -22,6 +22,7 @@ export default class DeleteAction extends Component {
     open: false,
     feedback: false,
     feedbackMsg: 'Complete!',
+    actions: [],
     isLoading: false,
   }
 
@@ -37,16 +38,11 @@ export default class DeleteAction extends Component {
     this.setState({ feedback: false });
   }
 
-  handleDeleteData = () => {
-    const { item, dispatch, action } = this.props;
-
-    const deletingModel = {
-      _id: item._id,
-    };
+  handleEditData = (editingModel) => {
+    const { dispatch } = this.props;
 
     this.setState({ feedback: true, isLoading: true });
-    // Can't call setState (or forceUpdate) on an unmounted component.
-    dispatch(action(deletingModel))
+    dispatch(editOrder(editingModel))
       .then(response => this.setState({ feedbackMsg: 'Complete!' }))
       .catch((err) => {
         if (err) this.setState({ feedbackMsg: 'Failed!' });
@@ -54,41 +50,33 @@ export default class DeleteAction extends Component {
       .finally(() => this.setState({ open: false, isLoading: false }));
   }
 
+  getActions = (actions) => {
+    this.setState({ actions });
+  }
+
   render() {
     const {
       open,
       feedback,
       feedbackMsg,
+      actions,
       isLoading,
     } = this.state;
-    const { item, activeType } = this.props;
-    const actions = [
-      <FlatButton
-        key={0}
-        label="Ok"
-        primary
-        onClick={this.handleDeleteData}
-      />,
-      <FlatButton
-        key={1}
-        label="Discard"
-        primary
-        onClick={this.handleClose}
-      />,
-    ];
+    const { item } = this.props;
 
     return (
       <div className="element-inline">
-        <FlatButton label="Delete" onClick={this.handleOpen} />
+        <FlatButton label="Edit" onClick={this.handleOpen} />
         <Dialog
-          title={`Delete ${pluralize(activeType, 1)}`}
+          title="Edit Order"
           actions={actions}
           modal
           open={open}
           onRequestClose={this.handleClose}
           autoScrollBodyContent
+          contentClassName="orderModal"
         >
-          <span>Are you sure that you want to delete {item.name}?</span>
+          <OrderForm item={item} onSubmit={this.handleEditData} onClose={this.handleClose} getActions={this.getActions} />
         </Dialog>
         <Snackbar
           open={feedback}
@@ -100,3 +88,4 @@ export default class DeleteAction extends Component {
     );
   }
 }
+

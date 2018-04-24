@@ -82,6 +82,23 @@
   height: 40px !important;
 }
 
+.orderModal {
+  // width: calc(100vw - 50px) !important;
+  width: 60vw !important;
+  max-width: none !important;
+}
+
+.maxh-45 {
+  max-height: 45vh;
+}
+
+/* FLEX */
+@for $i from 1 through 10 {
+  .flx-#{$i} {
+    flex: $i;
+  }
+}
+
 /* MARGINS */
 .m-hc {
   margin: 0 auto;

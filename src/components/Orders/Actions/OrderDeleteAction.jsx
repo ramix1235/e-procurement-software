@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import pluralize from 'pluralize';
+
+import { deleteOrder } from '../../../redux/actions/orderActions';
 
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
@@ -12,8 +13,6 @@ import Loader from '../../containers/Loader';
 @connect()
 export default class DeleteAction extends Component {
   static propTypes = {
-    action: PropTypes.func.isRequired,
-    activeType: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
     item: PropTypes.object.isRequired,
   }
@@ -38,7 +37,7 @@ export default class DeleteAction extends Component {
   }
 
   handleDeleteData = () => {
-    const { item, dispatch, action } = this.props;
+    const { item, dispatch } = this.props;
 
     const deletingModel = {
       _id: item._id,
@@ -46,7 +45,7 @@ export default class DeleteAction extends Component {
 
     this.setState({ feedback: true, isLoading: true });
     // Can't call setState (or forceUpdate) on an unmounted component.
-    dispatch(action(deletingModel))
+    dispatch(deleteOrder(deletingModel))
       .then(response => this.setState({ feedbackMsg: 'Complete!' }))
       .catch((err) => {
         if (err) this.setState({ feedbackMsg: 'Failed!' });
@@ -61,7 +60,7 @@ export default class DeleteAction extends Component {
       feedbackMsg,
       isLoading,
     } = this.state;
-    const { item, activeType } = this.props;
+    const { item } = this.props;
     const actions = [
       <FlatButton
         key={0}
@@ -81,7 +80,7 @@ export default class DeleteAction extends Component {
       <div className="element-inline">
         <FlatButton label="Delete" onClick={this.handleOpen} />
         <Dialog
-          title={`Delete ${pluralize(activeType, 1)}`}
+          title="Delete Order"
           actions={actions}
           modal
           open={open}

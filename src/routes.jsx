@@ -4,6 +4,7 @@ import { Switch, Route, Redirect } from 'react-router';
 import App from '@components/App';
 import Main from '@components/Main';
 import Inventory from '@components/Inventory';
+import Orders from '@components/Orders';
 import AppBar from 'material-ui/AppBar';
 
 const DefaultContentLayout = ({ component: Component, ...rest }) => (
@@ -28,7 +29,7 @@ export default (
       <DefaultContentLayout exact path="/" component={() => <Redirect to="/inventory" />} />
       <DefaultContentLayout exact path="/inventory" component={Inventory} />
       <DefaultContentLayout exact path="/charts" component={() => <div>Charts</div>} />
-      <DefaultContentLayout exact path="/orders" component={() => <div>Orders</div>} />
+      <DefaultContentLayout exact path="/orders" component={Orders} />
     </Switch>
   </App>
 );
