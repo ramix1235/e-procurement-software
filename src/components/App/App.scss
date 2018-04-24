@@ -51,10 +51,25 @@
   // height: 569px;
 }
 
-.data-table {
+.inventory-table {
   display: flex;
   justify-content: center;
   height: calc(100vh - 233px);
+  // height: 500px;
+}
+
+.orders-table {
+  display: flex;
+  justify-content: center;
+  height: calc(100vh - 220px);
+  // height: 500px;
+}
+
+.charts-table {
+  display: flex;
+  justify-content: flex-start;
+  height: calc(100vh - 162px);
+  overflow-y: auto;
   // height: 500px;
 }
 
@@ -236,6 +251,10 @@
 
 .jc-fe {
   justify-content: flex-end;
+}
+
+.jc-fs {
+  justify-content: flex-start;
 }
 
 .f-d-column {

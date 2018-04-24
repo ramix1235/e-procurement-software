@@ -184,7 +184,6 @@ export default class OrderForm extends Component {
   handleCheckedProduct = (checkedItemsIndexes) => {
     // const { dispatch } = this.props;
 
-    console.log(checkedItemsIndexes);
     this.setState({ checkedItemsIndexes });
     // dispatch(updateCheckedItemsIndexes(checkedItemsIndexes));
   }

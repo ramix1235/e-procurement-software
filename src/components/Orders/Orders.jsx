@@ -82,7 +82,7 @@ export default class Orders extends Component {
           <div className="d-f f-d-row ai-c jc-fe m-r-50 m-t-52">
             <OrderActions />
           </div>
-          <div className="data-table">
+          <div className="orders-table">
             {isLoading
               ? <Loader />
               : <DataTable header={header} body={body} />}

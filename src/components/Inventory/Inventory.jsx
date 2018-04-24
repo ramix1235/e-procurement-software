@@ -144,7 +144,7 @@ export default class Inventory extends Component {
               <Actions activeType={activeType} />
             </div>
           </div>
-          <div className="data-table">
+          <div className="inventory-table">
             {this.renderTable()}
           </div>
         </Paper>
