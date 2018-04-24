@@ -23,8 +23,8 @@ app.use(assetsData);
 // router
 router(app, {});
 
-// app.use('/public/', express.static(path.resolve(__dirname, 'public')));
-app.use(express.static(path.resolve(__dirname, '/public')));
+app.use('/public/', express.static(path.resolve(__dirname, 'public')));
+// app.use(express.static(path.resolve(__dirname, '/public')));
 
 app.engine('ejs', engine);
 app.set('views', path.join(__dirname, '/views'));
