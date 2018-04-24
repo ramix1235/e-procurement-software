@@ -1,4 +1,10 @@
 {
     "port": 3001,
-    "databaseURI": "mongodb://admin:admin@ds225028.mlab.com:25028/e-procurement-database"
+    "databaseURI": "mongodb://admin:admin@ds225028.mlab.com:25028/e-procurement-database",
+    "emailService": {
+      "address": "vladyslav.kharitonov@hneu.net",
+      "password": "Fabn0618",
+      "smtpHost": "smtp.gmail.com",
+      "from": "Friendly Suppliers [ dev ] <friendlysuppliers@fr.com>"
+    }
 }

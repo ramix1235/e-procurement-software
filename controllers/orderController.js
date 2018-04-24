@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import BaseController from './baseController';
 import Order from '../models/order';
+import EmailService from '../services/emailService';
 
 export default class OrderController extends BaseController {
   static addOrder(req, res) {
@@ -69,6 +70,17 @@ export default class OrderController extends BaseController {
       this.getOrders(req, res);
       return res;
     });
+  }
+
+  static sendOrderEmailToSupplier(req, res, next) {
+    const orderData = req.body;
+
+    EmailService.sendMail({
+      template: 'order',
+      subject: 'Purchase order',
+      to: orderData.supplier.email,
+      data: orderData,
+    }).finally(e => res.send());
   }
 
   static getOrders(req, res, next) {

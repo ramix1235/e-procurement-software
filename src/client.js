@@ -10,15 +10,15 @@ import routes from './routes';
 const faviconUrl = '../public/favs/favicon32x32.ico';
 
 ReactDOM.render(
-  <MuiThemeProvider>
-    <Fragment>
-      <Favicon url={faviconUrl} />
+  <Fragment>
+    <Favicon url={faviconUrl} />
+    <MuiThemeProvider>
       <Provider store={configureStore()}>
         <BrowserRouter>
           {routes}
         </BrowserRouter>
       </Provider>
-    </Fragment>
-  </MuiThemeProvider>,
+    </MuiThemeProvider>
+  </Fragment>,
   document.getElementById('react-view')
 );

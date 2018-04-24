@@ -16,4 +16,8 @@ export default (app) => {
   app.post('/api/order/deleteOrder', (req, res) => {
     orderController.deleteOrder(req, res);
   });
+
+  app.post('/api/order/email', (req, res) => {
+    orderController.sendOrderEmailToSupplier(req, res);
+  });
 };

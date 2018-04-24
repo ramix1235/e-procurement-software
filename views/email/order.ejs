@@ -1,0 +1,18 @@
+<% layout('./layout') -%>
+<div>
+  <ol>
+      <% data.products.forEach(function(product){ %>
+          <li>
+            <div>
+                Name: <i><%= product.name %></i>
+            </div>
+            <div>
+                Vendor Code: <i><%= product.vendorCode %></i>
+            </div>
+            <div>
+                Price: <i><%= product.price %></i>
+            </div>
+          </li>
+      <%  }); %>
+  </ol>
+</div>

@@ -1,6 +1,7 @@
 
 import express from 'express';
 import engine from 'ejs-mate';
+// import engine from 'ejs-locals';
 import path from 'path';
 import bodyParser from 'body-parser';
 
@@ -22,8 +23,11 @@ app.use(assetsData);
 // router
 router(app, {});
 
-app.use('/public/', express.static(path.resolve(__dirname, 'public')));
+// app.use('/public/', express.static(path.resolve(__dirname, 'public')));
+app.use(express.static(path.resolve(__dirname, '/public')));
+
 app.engine('ejs', engine);
+app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 app.set('layout extractScripts', true);
 

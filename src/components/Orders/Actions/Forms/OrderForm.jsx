@@ -5,9 +5,10 @@ import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
 
 import { getSuppliers } from '../../../../redux/actions/supplierActions';
+import { sendOrderEmailToSupplier } from '../../../../../api/order';
 // import { updateCheckedItemsIndexes } from '../../../../redux/actions/orderActions';
 
-import { TextField, FlatButton, DropDownMenu, MenuItem, DatePicker } from 'material-ui';
+import { TextField, FlatButton, DropDownMenu, MenuItem, DatePicker, RaisedButton } from 'material-ui';
 import SelectDataTable from './SelectDataTable';
 import Loader from '@components/containers/Loader';
 
@@ -56,6 +57,7 @@ export default class OrderForm extends Component {
     endDateBy: this.props.item.endDate ? new Date(this.props.item.endDate) : null,
     supplierBy: this.props.item.data.supplier,
     isLoading: false,
+    isEmailSending: false,
     body: [],
     checkedItemsIndexes: this.props.item.data.products,
   }
@@ -163,22 +165,9 @@ export default class OrderForm extends Component {
 
   handleSubmitClick = () => {
     const { onSubmit, item } = this.props;
-    const { statusBy, supplierBy, checkedItemsIndexes } = this.state;
+    const { statusBy } = this.state;
 
-    const formattedCheckedItems = {
-      products: checkedItemsIndexes
-        .map(index => ({
-          price: supplierBy.products[index].price,
-          name: supplierBy.products[index].product.name,
-          vendorCode: supplierBy.products[index].product.vendorCode,
-        })),
-      supplier: {
-        address: supplierBy.address,
-        email: supplierBy.email,
-        name: supplierBy.name,
-        phone: supplierBy.phone,
-      },
-    };
+    const formattedCheckedItems = this.formattedData();
 
     const model = {
       _id: item._id,
@@ -200,6 +189,17 @@ export default class OrderForm extends Component {
     // dispatch(updateCheckedItemsIndexes(checkedItemsIndexes));
   }
 
+  handleEmailSubmit = () => {
+    const formattedCheckedItems = this.formattedData();
+
+    this.setState({ isEmailSending: true });
+    sendOrderEmailToSupplier(formattedCheckedItems)
+      .catch((err) => {
+        if (err) console.log(err);
+      })
+      .finally(() => this.setState({ isEmailSending: false }));
+  }
+
   updateTableData = () => {
     const { supplierBy } = this.state;
 
@@ -214,6 +214,25 @@ export default class OrderForm extends Component {
     this.setState({ body: updatedModelData });
   }
 
+  formattedData = () => {
+    const { supplierBy, checkedItemsIndexes } = this.state;
+
+    return {
+      products: checkedItemsIndexes
+        .map(index => ({
+          price: supplierBy.products[index].price,
+          name: supplierBy.products[index].product.name,
+          vendorCode: supplierBy.products[index].product.vendorCode,
+        })),
+      supplier: {
+        address: supplierBy.address,
+        email: supplierBy.email,
+        name: supplierBy.name,
+        phone: supplierBy.phone,
+      },
+    };
+  }
+
   render() {
     const { item, suppliers } = this.props;
     const {
@@ -224,6 +243,7 @@ export default class OrderForm extends Component {
       isLoading,
       body,
       checkedItemsIndexes,
+      isEmailSending,
     } = this.state;
     // const { checkedItemsIndexes } = this.props;
 
@@ -262,6 +282,12 @@ export default class OrderForm extends Component {
               <MenuItem key={`status-${idx}`} value={status} primaryText={status} />
             ))}
           </DropDownMenu>
+          <br />
+          <br />
+          {isEmailSending
+            ? <Loader />
+            : <RaisedButton className="space-left-s" label={`Send e-mail to ${supplierBy.name}`} onClick={this.handleEmailSubmit} />
+          }
         </div>
         <div className="d-f f-d-column flx-1 m-l-50">
           <DropDownMenu value={supplierBy} onChange={this.handleDropDownSuppliers}>
